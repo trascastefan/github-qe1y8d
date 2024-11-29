@@ -1,0 +1,25 @@
+@layer base {
+  :root {
+    color-scheme: light;
+    --background: theme('colors.surface.DEFAULT');
+    --background-secondary: theme('colors.surface.secondary');
+    --text-primary: theme('colors.text.primary');
+    --text-secondary: theme('colors.text.secondary');
+  }
+
+  :root.dark {
+    color-scheme: dark;
+    --background: theme('colors.surface-dark.DEFAULT');
+    --background-secondary: theme('colors.surface-dark.secondary');
+    --text-primary: theme('colors.text-dark.primary');
+    --text-secondary: theme('colors.text-dark.secondary');
+  }
+
+  html {
+    @apply bg-surface dark:bg-surface-dark text-text-primary dark:text-text-dark-primary transition-colors duration-200;
+  }
+
+  body {
+    @apply min-h-screen;
+  }
+}

@@ -159,6 +159,7 @@ export function EmailList({ emails, selectedView, views, getParentView, tags }: 
         <TagSelector
           existingTags={selectedEmail.tags}
           availableTags={Array.from(new Set(views.flatMap(view => view.conditions.flatMap(c => c.tags))))}
+          tags={tags}
           onClose={() => {
             setShowTagSelector(false);
             setSelectedEmail(null);

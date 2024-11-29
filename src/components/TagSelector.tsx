@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { X, Search, Plus } from 'lucide-react';
 import { Tag } from '../types';
-import tags from '../tags.json';
 
 interface TagSelectorProps {
   existingTags: string[];
   availableTags: string[];
+  tags: Tag[];
   onSave: (tags: string[]) => void;
   onClose: () => void;
   onAddNewTag?: (tagName: string) => void;
   className?: string;
 }
 
-export function TagSelector({ existingTags, availableTags, onSave, onClose, onAddNewTag, className = '' }: TagSelectorProps) {
+export function TagSelector({ existingTags, availableTags, tags, onSave, onClose, onAddNewTag, className = '' }: TagSelectorProps) {
   const [selectedTags, setSelectedTags] = useState<string[]>(existingTags);
   const [searchQuery, setSearchQuery] = useState('');
   const [showNewTagInput, setShowNewTagInput] = useState(false);
@@ -90,7 +90,7 @@ export function TagSelector({ existingTags, availableTags, onSave, onClose, onAd
                     focus:ring-blue-500 dark:focus:ring-blue-400"
                 />
                 <span className="text-gray-900 dark:text-white group-hover:text-gray-900 dark:group-hover:text-white">
-                  {tags.find(t => t.id === tag)?.name || tag}
+                  {tag}
                 </span>
               </label>
             ))}

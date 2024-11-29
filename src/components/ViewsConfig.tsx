@@ -111,9 +111,9 @@ export function ViewsConfig({ views, onUpdateViews }: ViewsConfigProps) {
   };
 
   return (
-    <div className="flex-1 p-8 overflow-y-auto">
+    <div className="flex-1 p-8 overflow-y-auto bg-surface dark:bg-surface-dark">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-2xl font-bold mb-6">Configure Views</h1>
+        <h1 className="text-2xl font-bold mb-6 text-text-primary dark:text-text-dark-primary">Configure Views</h1>
         
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="views">
@@ -132,19 +132,19 @@ export function ViewsConfig({ views, onUpdateViews }: ViewsConfigProps) {
                         <div
                           ref={provided.innerRef}
                           {...provided.draggableProps}
-                          className="bg-white rounded-lg border p-4"
+                          className="bg-white dark:bg-surface-dark-secondary rounded-lg border border-border dark:border-border-dark p-4 transition-colors duration-200"
                         >
                           <div className="flex items-center mb-4">
                             <div
                               {...provided.dragHandleProps}
-                              className="mr-3 text-gray-400 hover:text-gray-600"
+                              className="mr-3 text-secondary dark:text-text-dark-secondary hover:text-gray-600 dark:hover:text-text-dark-primary transition-colors"
                               aria-label="Drag to reorder"
                             >
                               <GripVertical className="w-5 h-5" />
                             </div>
                             <div className="flex items-center flex-1">
-                              <span className="font-medium text-text-primary">{view.name}</span>
-                              <span className="ml-2 text-sm text-secondary bg-surface-secondary px-2 py-0.5 rounded-full">
+                              <span className="font-medium text-text-primary dark:text-text-dark-primary">{view.name}</span>
+                              <span className="ml-2 text-sm text-secondary dark:text-text-dark-secondary bg-surface-secondary dark:bg-surface-dark-tertiary px-2 py-0.5 rounded-full">
                                 {matchingEmails} {matchingEmails === 1 ? 'email' : 'emails'}
                               </span>
                             </div>
@@ -152,7 +152,7 @@ export function ViewsConfig({ views, onUpdateViews }: ViewsConfigProps) {
 
                           <div className="relative space-y-3 pl-6">
                             {/* Vertical line for visual grouping */}
-                            <div className="absolute left-2 top-2 bottom-2 w-0.5 bg-gray-200"></div>
+                            <div className="absolute left-2 top-2 bottom-2 w-0.5 bg-gray-200 dark:bg-gray-700"></div>
 
                             {view.conditions.map((condition, conditionIndex) => (
                               <div key={`${view.id}-condition-${conditionIndex}`} className="flex items-start space-x-3">
@@ -203,18 +203,18 @@ export function ViewsConfig({ views, onUpdateViews }: ViewsConfigProps) {
                                 <div className="flex space-x-2">
                                   <button
                                     onClick={() => handleAddCondition(view.id)}
-                                    className="p-1 hover:bg-surface-secondary rounded"
+                                    className="p-1 hover:bg-surface-secondary dark:hover:bg-surface-dark-secondary rounded transition-colors"
                                     aria-label="Add new condition"
                                   >
-                                    <Plus className="w-4 h-4 text-secondary" />
+                                    <Plus className="w-4 h-4 text-secondary dark:text-text-dark-secondary" />
                                   </button>
                                   {view.conditions.length > 1 && (
                                     <button
                                       onClick={() => handleRemoveCondition(view.id, conditionIndex)}
-                                      className="p-1 hover:bg-surface-secondary rounded"
+                                      className="p-1 hover:bg-surface-secondary dark:hover:bg-surface-dark-secondary rounded transition-colors"
                                       aria-label="Remove condition"
                                     >
-                                      <X className="w-4 h-4 text-secondary" />
+                                      <X className="w-4 h-4 text-secondary dark:text-text-dark-secondary" />
                                     </button>
                                   )}
                                 </div>

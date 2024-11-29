@@ -1,0 +1,54 @@
+@layer components {
+  .tag-pill {
+    @apply inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-full transition-colors;
+    background-color: #f1f5f9;
+    color: #475569;
+  }
+
+  .tag-pill:hover {
+    background-color: #e2e8f0;
+  }
+
+  .tag-pill.priority-high {
+    @apply bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300;
+  }
+
+  .tag-pill.priority-medium {
+    @apply bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300;
+  }
+
+  .tag-pill.priority-low {
+    @apply bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300;
+  }
+
+  .tag-pill.status-new {
+    @apply bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300;
+  }
+
+  .tag-pill.status-in-progress {
+    @apply bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300;
+  }
+
+  .tag-pill.status-completed {
+    @apply bg-gray-100 dark:bg-gray-900/30 text-gray-700 dark:text-gray-300;
+  }
+
+  .tag-remove-button {
+    @apply ml-1.5 opacity-100 transition-colors;
+    color: #94a3b8;
+  }
+
+  .tag-remove-button:hover {
+    color: #dc2626;
+  }
+
+  .tag-add-button {
+    @apply inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-full transition-colors;
+    color: #475569;
+    background-color: transparent;
+  }
+
+  .tag-add-button:hover {
+    background-color: #f1f5f9;
+  }
+}
