@@ -1,0 +1,188 @@
+{
+  "emails": [
+    {
+      "id": 1,
+      "sender": "Tax Office",
+      "subject": "Annual Tax Statement",
+      "preview": "Your tax statement for the year 2023 is now available for review. Please log in to your account to access the document.",
+      "date": "Mar 15",
+      "tags": ["gov", "tax"]
+    },
+    {
+      "id": 2,
+      "sender": "Health Insurance Co",
+      "subject": "Insurance Renewal Notice",
+      "preview": "Your health insurance policy is due for renewal. Review your coverage options and update your plan if needed.",
+      "date": "Mar 14",
+      "tags": ["health-ins"]
+    },
+    {
+      "id": 3,
+      "sender": "Investment Bank",
+      "subject": "Q1 Portfolio Update",
+      "preview": "Your investment portfolio performance report for Q1 2024 is now available. See how your investments have grown.",
+      "date": "Mar 13",
+      "tags": ["banking", "invest"]
+    },
+    {
+      "id": 4,
+      "sender": "City Housing Authority",
+      "subject": "Lease Agreement Update",
+      "preview": "Important updates to your lease agreement terms. Please review the changes and acknowledge receipt.",
+      "date": "Mar 13",
+      "tags": ["housing", "gov"]
+    },
+    {
+      "id": 5,
+      "sender": "Electric Company",
+      "subject": "March Statement Available",
+      "preview": "Your electricity bill for March 2024 is now available. Total amount due: $142.50",
+      "date": "Mar 12",
+      "tags": ["utilities"]
+    },
+    {
+      "id": 6,
+      "sender": "HR Department",
+      "subject": "Annual Performance Review",
+      "preview": "Your annual performance review is scheduled for next week. Please complete the self-assessment form.",
+      "date": "Mar 12",
+      "tags": ["job", "prof"]
+    },
+    {
+      "id": 7,
+      "sender": "Online University",
+      "subject": "Course Completion Certificate",
+      "preview": "Congratulations on completing Advanced Data Analytics! Your certificate is ready to download.",
+      "date": "Mar 11",
+      "tags": ["edu"]
+    },
+    {
+      "id": 8,
+      "sender": "Water Utility",
+      "subject": "Scheduled Maintenance Notice",
+      "preview": "Water service interruption scheduled for maintenance. Date: March 20, Time: 10 AM - 2 PM",
+      "date": "Mar 11",
+      "tags": ["utilities"]
+    },
+    {
+      "id": 9,
+      "sender": "Investment Advisor",
+      "subject": "Portfolio Strategy Meeting",
+      "preview": "Schedule your quarterly portfolio review meeting to discuss investment strategy and market outlook.",
+      "date": "Mar 10",
+      "tags": ["invest", "prof"]
+    },
+    {
+      "id": 10,
+      "sender": "Property Management",
+      "subject": "Building Maintenance Update",
+      "preview": "Monthly maintenance schedule for your building. Includes elevator maintenance and security updates.",
+      "date": "Mar 10",
+      "tags": ["housing"]
+    },
+    {
+      "id": 11,
+      "sender": "Professional Association",
+      "subject": "Membership Benefits Update",
+      "preview": "New benefits added to your professional membership. Access exclusive industry reports and networking events.",
+      "date": "Mar 9",
+      "tags": ["prof"]
+    },
+    {
+      "id": 12,
+      "sender": "Government Portal",
+      "subject": "Identity Verification Required",
+      "preview": "Action required: Verify your identity for continued access to government services.",
+      "date": "Mar 9",
+      "tags": ["gov"]
+    },
+    {
+      "id": 13,
+      "sender": "Bank of Finance",
+      "subject": "New Statement Available",
+      "preview": "Your monthly bank statement for February 2024 is ready to view in your online banking portal.",
+      "date": "Mar 8",
+      "tags": ["banking"]
+    },
+    {
+      "id": 14,
+      "sender": "Career Development",
+      "subject": "Job Application Update",
+      "preview": "Your application for Senior Developer position has moved to the next round. Schedule your interview.",
+      "date": "Mar 8",
+      "tags": ["job"]
+    },
+    {
+      "id": 15,
+      "sender": "Tax Consultant",
+      "subject": "Tax Return Review",
+      "preview": "Review your 2023 tax return draft before final submission. Schedule a consultation if needed.",
+      "date": "Mar 7",
+      "tags": ["tax", "prof"]
+    },
+    {
+      "id": 16,
+      "sender": "Healthcare Provider",
+      "subject": "Annual Check-up Reminder",
+      "preview": "Time for your annual health check-up. Schedule your appointment online or call our office.",
+      "date": "Mar 7",
+      "tags": ["health-ins"]
+    },
+    {
+      "id": 17,
+      "sender": "Internet Provider",
+      "subject": "Service Upgrade Available",
+      "preview": "Exclusive offer: Upgrade your internet speed and get 3 months at reduced price.",
+      "date": "Mar 6",
+      "tags": ["utilities"]
+    },
+    {
+      "id": 18,
+      "sender": "Professional Training",
+      "subject": "Workshop Registration",
+      "preview": "Your registration for 'Leadership in Tech' workshop is confirmed. Date: March 25-26",
+      "date": "Mar 6",
+      "tags": ["edu", "prof"]
+    },
+    {
+      "id": 19,
+      "sender": "Retirement Fund",
+      "subject": "Quarterly Statement",
+      "preview": "Your retirement fund performance report for Q1 2024 is available. Review your investment allocation.",
+      "date": "Mar 5",
+      "tags": ["invest", "banking"]
+    },
+    {
+      "id": 20,
+      "sender": "Housing Association",
+      "subject": "Community Newsletter",
+      "preview": "March community newsletter: upcoming events, maintenance schedule, and important announcements.",
+      "date": "Mar 5",
+      "tags": ["housing"]
+    },
+    {
+      "id": 21,
+      "sender": "Professional Network",
+      "subject": "Tech Conference 2024",
+      "preview": "Early bird registration now open for Annual Tech Conference. Special rates for members.",
+      "date": "Mar 4",
+      "tags": ["prof", "edu"]
+    },
+    {
+      "id": 22,
+      "sender": "Insurance Agency",
+      "subject": "Coverage Review",
+      "preview": "Annual insurance policy review: Updates to coverage options and new benefits available.",
+      "date": "Mar 4",
+      "tags": ["health-ins"]
+    },
+    {
+      "id": 23,
+      "sender": "Municipal Office",
+      "subject": "Property Assessment",
+      "preview": "Your 2024 property tax assessment is now available. Review the updated property valuation.",
+      "date": "Mar 3",
+      "tags": ["tax", "housing", "gov"]
+    }
+  ]
+}

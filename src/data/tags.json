@@ -1,0 +1,99 @@
+{
+  "tags": [
+    {
+      "id": "document",
+      "name": "Document",
+      "description": "Documents and files"
+    },
+    {
+      "id": "official",
+      "name": "Official",
+      "description": "Official documents and communications"
+    },
+    {
+      "id": "living",
+      "name": "Living",
+      "description": "Home and living related"
+    },
+    {
+      "id": "home",
+      "name": "Home",
+      "description": "Home-related items"
+    },
+    {
+      "id": "utilities",
+      "name": "Utilities",
+      "description": "Utility bills and services"
+    },
+    {
+      "id": "banking",
+      "name": "Banking",
+      "description": "Banking-related items"
+    },
+    {
+      "id": "finance",
+      "name": "Finance",
+      "description": "Financial matters"
+    },
+    {
+      "id": "work",
+      "name": "Work",
+      "description": "Work-related items"
+    },
+    {
+      "id": "education",
+      "name": "Education",
+      "description": "Education-related items"
+    },
+    {
+      "id": "school",
+      "name": "School",
+      "description": "School-related items"
+    },
+    {
+      "id": "business",
+      "name": "Business",
+      "description": "Business-related items"
+    },
+    {
+      "id": "gov",
+      "name": "Government",
+      "description": "Government-related items"
+    },
+    {
+      "id": "tax",
+      "name": "Tax",
+      "description": "Tax-related items"
+    },
+    {
+      "id": "health-ins",
+      "name": "Health Insurance",
+      "description": "Health insurance documents"
+    },
+    {
+      "id": "invest",
+      "name": "Investment",
+      "description": "Investment-related items"
+    },
+    {
+      "id": "housing",
+      "name": "Housing",
+      "description": "Housing-related items"
+    },
+    {
+      "id": "job",
+      "name": "Job",
+      "description": "Job-related items"
+    },
+    {
+      "id": "prof",
+      "name": "Professional",
+      "description": "Professional matters"
+    },
+    {
+      "id": "edu",
+      "name": "Education",
+      "description": "Educational matters"
+    }
+  ]
+}
