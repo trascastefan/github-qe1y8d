@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { RefreshCcw, Archive, Plus, X } from 'lucide-react';
+import { RefreshCcw, Archive, Plus } from 'lucide-react';
 import { Email, View, Tag } from '../types';
 import { TagSelector } from './TagSelector';
+import { TagPill } from './TagPill';
 
 interface EmailListProps {
   emails: Email[];
@@ -18,7 +19,7 @@ export function EmailList({ emails, selectedView, views, getParentView, tags }: 
 
   const filteredEmails = useMemo(() => {
     if (!selectedView) {
-      return emailsState; // Show all emails when no view is selected (default home state)
+      return emailsState;
     }
     
     const view = views.find(v => v.id === selectedView);
@@ -63,7 +64,6 @@ export function EmailList({ emails, selectedView, views, getParentView, tags }: 
   };
 
   const handleAddNewTag = (tagName: string) => {
-    // In a real application, this would be handled by a global tag management system
     console.log('New tag created:', tagName);
   };
 
@@ -74,7 +74,7 @@ export function EmailList({ emails, selectedView, views, getParentView, tags }: 
           <div className="flex items-center">
             <input 
               type="checkbox" 
-              className="mr-4"
+              className="mr-4 h-5 w-5"
               aria-label="Select all emails" 
             />
             <button 
@@ -102,40 +102,33 @@ export function EmailList({ emails, selectedView, views, getParentView, tags }: 
         {filteredEmails.map((email) => (
           <div
             key={email.id}
-            className="flex items-center px-4 py-2 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+            className="flex items-center px-4 py-3 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer"
           >
             <input 
               type="checkbox" 
-              className="mr-4"
+              className="mr-4 h-5 w-5"
               aria-label={`Select email from ${email.sender}`}
             />
             <div className="flex-1 min-w-0">
               <div className="flex items-center">
-                <span className="font-medium max-w-[calc(100%-100px)] break-words dark:text-white">{email.sender}</span>
-                <span className="ml-auto text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">{email.date}</span>
+                <span className="font-medium max-w-[calc(100%-100px)] break-words dark:text-white">
+                  {email.sender}
+                </span>
+                <span className="ml-auto text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                  {email.date}
+                </span>
               </div>
               <div className="text-sm text-gray-600 dark:text-gray-300">
                 <div className="break-words">{email.subject}</div>
                 <div className="text-gray-500 dark:text-gray-400 break-words">{email.preview}</div>
               </div>
-              <div className="flex gap-2 mt-1 flex-wrap">
+              <div className="flex gap-2 mt-2 flex-wrap">
                 {email.tags.map((tag) => (
-                  <span 
-                    key={tag} 
-                    className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-blue-50 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 group hover:bg-blue-100 dark:hover:bg-blue-900/70 transition-colors"
-                  >
-                    {tags.find(t => t.id === tag)?.name || tag}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleRemoveTag(email.id, tag);
-                      }}
-                      className="ml-1.5 hover:text-blue-800 dark:hover:text-blue-200"
-                      aria-label={`Remove ${tags.find(t => t.id === tag)?.name || tag} tag`}
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  </span>
+                  <TagPill
+                    key={tag}
+                    tag={tags.find(t => t.id === tag)?.name || tag}
+                    onRemove={() => handleRemoveTag(email.id, tag)}
+                  />
                 ))}
                 <button
                   onClick={(e) => {
@@ -143,7 +136,9 @@ export function EmailList({ emails, selectedView, views, getParentView, tags }: 
                     setSelectedEmail(email);
                     setShowTagSelector(true);
                   }}
-                  className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  className="inline-flex items-center px-2 py-1.5 rounded-md text-xs font-medium 
+                    bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 
+                    hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   aria-label="Add new tag"
                 >
                   <Plus className="w-3.5 h-3.5 mr-1" />
@@ -166,37 +161,7 @@ export function EmailList({ emails, selectedView, views, getParentView, tags }: 
           }}
           onAddNewTag={handleAddNewTag}
           onAddTags={handleAddTags}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-        >
-          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 max-w-md w-full mx-4">
-            <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Add Tags</h2>
-            <div className="space-y-4">
-              <div className="flex flex-wrap gap-2">
-                {Array.from(new Set(views.flatMap(view => view.conditions.flatMap(c => c.tags)))).map((tag) => (
-                  <button
-                    key={tag}
-                    className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                      selectedEmail.tags.includes(tag)
-                        ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
-                        : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-                    }`}
-                    onClick={() => handleAddTags([tag])}
-                  >
-                    {tag}
-                  </button>
-                ))}
-              </div>
-              <div className="flex gap-2 mt-6">
-                <button
-                  className="flex-1 px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
-                  onClick={() => setShowTagSelector(false)}
-                >
-                  Done
-                </button>
-              </div>
-            </div>
-          </div>
-        </TagSelector>
+        />
       )}
     </main>
   );

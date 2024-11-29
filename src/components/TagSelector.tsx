@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Search, Plus } from 'lucide-react';
 import { Tag } from '../types';
+import { TagPill } from './TagPill';
 
 interface TagSelectorProps {
   existingTags: string[];
@@ -12,7 +13,15 @@ interface TagSelectorProps {
   className?: string;
 }
 
-export function TagSelector({ existingTags, availableTags, tags, onSave, onClose, onAddNewTag, className = '' }: TagSelectorProps) {
+export function TagSelector({
+  existingTags,
+  availableTags,
+  tags,
+  onSave,
+  onClose,
+  onAddNewTag,
+  className = ''
+}: TagSelectorProps) {
   const [selectedTags, setSelectedTags] = useState<string[]>(existingTags);
   const [searchQuery, setSearchQuery] = useState('');
   const [showNewTagInput, setShowNewTagInput] = useState(false);

@@ -4,6 +4,7 @@ import { GripVertical, Plus, X } from 'lucide-react';
 import { View, TagCondition } from '../types';
 import { TagSelector } from './TagSelector';
 import { getEmailCount } from '../utils/emailFilters';
+import { TagPill } from './TagPill';
 import emailData from '../data/emails.json';
 
 interface ViewsConfigProps {
@@ -23,17 +24,6 @@ export function ViewsConfig({ views, onUpdateViews }: ViewsConfigProps) {
     items.splice(result.destination.index, 0, reorderedItem);
 
     onUpdateViews(items);
-  };
-
-  const getUsedTagsInView = (viewId: string, excludeConditionIndex?: number): Set<string> => {
-    const view = views.find(v => v.id === viewId);
-    if (!view) return new Set();
-
-    return new Set(
-      view.conditions.flatMap((condition, index) => 
-        index === excludeConditionIndex ? [] : condition.tags
-      )
-    );
   };
 
   const handleConditionTypeChange = (viewId: string, conditionIndex: number, type: TagCondition['type']) => {
@@ -143,7 +133,9 @@ export function ViewsConfig({ views, onUpdateViews }: ViewsConfigProps) {
                               <GripVertical className="w-5 h-5" />
                             </div>
                             <div className="flex items-center flex-1">
-                              <span className="font-medium text-text-primary dark:text-text-dark-primary">{view.name}</span>
+                              <span className="font-medium text-text-primary dark:text-text-dark-primary">
+                                {view.name}
+                              </span>
                               <span className="ml-2 text-sm text-secondary dark:text-text-dark-secondary bg-surface-secondary dark:bg-surface-dark-tertiary px-2 py-0.5 rounded-full">
                                 {matchingEmails} {matchingEmails === 1 ? 'email' : 'emails'}
                               </span>
@@ -151,7 +143,6 @@ export function ViewsConfig({ views, onUpdateViews }: ViewsConfigProps) {
                           </div>
 
                           <div className="relative space-y-3 pl-6">
-                            {/* Vertical line for visual grouping */}
                             <div className="absolute left-2 top-2 bottom-2 w-0.5 bg-gray-200 dark:bg-gray-700"></div>
 
                             {view.conditions.map((condition, conditionIndex) => (
@@ -173,25 +164,22 @@ export function ViewsConfig({ views, onUpdateViews }: ViewsConfigProps) {
 
                                   <div className="flex flex-wrap gap-2">
                                     {condition.tags.map((tag) => (
-                                      <span key={`${view.id}-${conditionIndex}-${tag}`} className="tag-pill group">
-                                        {tag}
-                                        <button
-                                          onClick={() => handleUpdateTags(
-                                            condition.tags.filter(t => t !== tag)
-                                          )}
-                                          className="tag-remove-button"
-                                          aria-label={`Remove ${tag} tag`}
-                                        >
-                                          <X className="w-3.5 h-3.5" />
-                                        </button>
-                                      </span>
+                                      <TagPill
+                                        key={`${view.id}-${conditionIndex}-${tag}`}
+                                        tag={tag}
+                                        onRemove={() => handleUpdateTags(
+                                          condition.tags.filter(t => t !== tag)
+                                        )}
+                                      />
                                     ))}
                                     <button
                                       onClick={() => {
                                         setActiveView({ viewId: view.id, conditionIndex });
                                         setShowTagSelector(true);
                                       }}
-                                      className="tag-add-button"
+                                      className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium 
+                                        bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 
+                                        hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                                       aria-label="Add new tag"
                                     >
                                       <Plus className="w-3.5 h-3.5 mr-1" />
@@ -236,8 +224,8 @@ export function ViewsConfig({ views, onUpdateViews }: ViewsConfigProps) {
       {showTagSelector && activeView && (
         <TagSelector
           existingTags={views.find(v => v.id === activeView.viewId)?.conditions[activeView.conditionIndex].tags || []}
-          availableTags={Array.from(new Set(views.flatMap(view => view.conditions.flatMap(c => c.tags))))
-            .filter(tag => !getUsedTagsInView(activeView.viewId, activeView.conditionIndex).has(tag))}
+          availableTags={Array.from(new Set(views.flatMap(view => view.conditions.flatMap(c => c.tags))))}
+          tags={[]}
           onSave={handleUpdateTags}
           onClose={() => {
             setShowTagSelector(false);
