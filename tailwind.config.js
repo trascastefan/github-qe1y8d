@@ -47,7 +47,13 @@ export default {
         hover: {
           DEFAULT: '#f1f5f9',
           dark: '#374151',
-        }
+        },
+        menu: {
+          dark: '#1a1a1a',
+          hover: {
+            dark: 'rgba(31, 41, 55, 0.8)'
+          }
+        },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
@@ -55,6 +61,7 @@ export default {
       boxShadow: {
         card: '0 2px 4px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1)',
         'card-dark': '0 2px 4px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.3)',
+        'menu-dark': '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.24)'
       }
     },
   },
