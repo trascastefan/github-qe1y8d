@@ -19,16 +19,35 @@
    - Shows Inbox and Views in home page
    - Collapsible sidebar with persistent state (localStorage)
    - Two display modes:
-     - Expanded: Full-width with left-aligned items
-     - Collapsed: Compact width (128px) with centered, stacked items
-   - Consistent icon alignment with menu hamburger
+     - Expanded: Full-width (256px) with left-aligned items
+     - Collapsed: Compact width (144px) with centered, stacked items
+   - Enhanced animations and transitions:
+     - Hardware-accelerated transforms
+     - Smooth width transitions (300ms)
+     - Icon rotation on hover (-5deg)
+     - Scale effect on hover (102%)
+     - Opacity transitions for text
+   - Enhanced accessibility features:
+     - Keyboard navigation with Enter and Space key support
+     - Focus management and visible focus indicators
+     - ARIA roles and labels for all interactive elements
+     - Screen reader announcements for state changes
+     - Reduced motion support
+     - Touch-friendly targets
+   - Performance optimizations:
+     - GPU acceleration with transform-gpu
+     - Efficient state management
+     - Optimized hover animations
+     - Overflow control to prevent scrollbars
    - Section organization:
      - Inbox button at the top
      - Views section with label
      - Collapse/Expand toggle at bottom
-   - Responsive design:
+   - Responsive behavior:
      - Desktop: Fixed position with smooth transitions
-     - Mobile: Slide-out menu with full-height overlay
+     - Mobile: Auto-collapse with smooth animation
+     - EmailList automatically expands to use available space
+     - Transition duration: 300ms for all animations
 
 4. **EmailList**
    - Displays emails with tags
@@ -36,6 +55,15 @@
    - Shows checkbox selection
    - Empty state for non-Inbox views
    - Consistent tag styling across application
+   - Responsive layout:
+     - Automatically expands to fill available space
+     - Adapts to Sidebar's collapsed state
+     - Full-width email items with proper spacing
+   - Enhanced accessibility:
+     - Keyboard navigation for email selection
+     - ARIA roles and labels for list items
+     - Focus management for interactive elements
+     - Screen reader support for email actions
 
 5. **NavigationMenu**
    - Slide-out menu for main navigation
@@ -163,6 +191,33 @@
    - Proper handling of hover states for touch devices
    - Responsive image loading and scaling
 
+## Mobile Sidebar Implementation
+
+### Touch Target Requirements
+- All interactive elements must have a minimum touch target size of 44x44 pixels
+- Implementation using padding and hit-area expansion techniques
+- No interactive elements should be closer than 8px to prevent accidental touches
+- Touch targets should provide clear visual feedback on interaction
+
+### Gesture Implementation
+1. **Swipe Detection**
+   - Use TouchEvent API for native touch handling
+   - Implement threshold-based swipe detection
+   - Track touch start and end positions
+   - Calculate swipe direction and velocity
+
+2. **Sidebar State Management**
+   - Store sidebar state in local state management
+   - Implement smooth transitions between states
+   - Provide visual indicators for current state
+   - Handle edge cases (partial swipes, quick direction changes)
+
+3. **Performance Considerations**
+   - Use CSS transforms for smooth animations
+   - Implement touch event debouncing
+   - Optimize repaints during animations
+   - Handle memory management for touch events
+
 ## Theme System
 
 ### Dark Mode Architecture
@@ -236,8 +291,6 @@
 - Real-time email count calculations
 
 ## Future Considerations
-- improving homepage Sidebar for mobile
-- optimizing sidebar for mobile  
 - defining tags definition for prompting LLMs structured outputs to identify emails as having a specific tag
 - Email actions (archive, delete, etc.)
 - Accessibility features (keyboard navigation, screen readers, etc.)

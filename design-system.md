@@ -14,13 +14,24 @@
 - Ensure sufficient color contrast (minimum 4.5:1 for normal text)
 - Provide clear focus indicators
 - Support keyboard navigation
-- Include proper ARIA labels
+- Include proper ARIA labels and roles
+- Implement focus management
+- Support screen reader announcements
+- Handle keyboard interactions (Enter, Space, Escape)
+- Manage focus trapping in modals
+- Support reduced motion preferences
 
 ### 3. Responsiveness
 - Mobile-first approach
 - Fluid layouts that adapt to different screen sizes
 - Consistent behavior across devices
 - Touch-friendly target sizes (minimum 44px)
+- Touch gestures support for key interactions
+- Adaptive layouts:
+  - Components respond to available space
+  - Smooth transitions for layout changes
+  - Proper spacing in all viewport sizes
+  - Content reflow on sidebar collapse/expand
 
 ### 4. Performance
 - Optimize component rendering
@@ -147,7 +158,20 @@ colors: {
     transition: none;
   }
 }
-```
+
+## Mobile Interaction Guidelines
+1. **Touch Targets**
+   - Minimum touch target size: 44x44px
+   - Adequate spacing between interactive elements
+   - Visual feedback on touch interactions
+   - Clear hit states for all interactive elements
+
+2. **Gesture Support**
+   - Swipe right: expand sidebar
+   - Swipe left: collapse sidebar
+   - Smooth transitions for gesture-based actions
+   - Visual indicators for gesture availability
+   - Haptic feedback for successful gestures
 
 ## Typography
 
@@ -259,19 +283,50 @@ colors: {
 ## Animation Guidelines
 
 ### Transitions
-- Duration: 200ms
-- Timing: ease-in-out
-- Properties: opacity, transform, background-color
+- Use consistent timing functions (ease-in-out)
+- Standard durations:
+  - Quick: 150ms (scale, opacity)
+  - Medium: 200ms (color changes)
+  - Smooth: 300ms (layout changes)
+- Hardware acceleration for transforms
+- Support reduced motion preferences
+- Avoid layout shifts during animations
 
 ### Hover States
-- Subtle background color changes
-- Scale transforms where appropriate
-- Color transitions
+- Scale transforms: 102% on hover, 98% on active
+- Icon rotations: -5 degrees on hover
+- Opacity changes: 80% on hover for text
+- Color transitions: 200ms duration
+- Clear visual feedback
+- No layout shifts or scrollbars
+- Hardware-accelerated transforms
 
-### Loading States
-- Smooth animations
-- Clear indication of progress
-- Non-blocking where possible
+### Touch Interactions
+- Minimum touch target size: 44px
+- Clear visual feedback
+- No accidental triggers
+- Proper spacing between elements
+- Support for touch gestures
+- Smooth transitions
+
+### Component-Specific Animations
+
+#### Sidebar
+- Collapse/Expand:
+  - Width transition: 300ms ease-in-out
+  - Hardware-accelerated transform
+  - Smooth content fade
+  - No layout shifts
+- Hover Effects:
+  - Icon rotation: -5 degrees
+  - Scale up: 102%
+  - Text opacity: 80%
+  - GPU-accelerated transforms
+- Performance:
+  - Use transform-gpu
+  - Contain layout/paint
+  - Overflow control
+  - Reduced motion support
 
 ## Best Practices
 

@@ -59,7 +59,6 @@ export function Sidebar({ views, selectedView, onViewSelect, isCollapsed, onTogg
     }
   };
 
-  // Split label into words for stacked display
   const getStackedLabel = (label: string) => {
     return label.split(' ').map((word, index) => (
       <span key={index} className="block text-center leading-tight">
@@ -70,58 +69,126 @@ export function Sidebar({ views, selectedView, onViewSelect, isCollapsed, onTogg
 
   return (
     <aside 
-      className={`${
-        isCollapsed ? 'w-32' : 'w-64'
-      } flex-none bg-white dark:bg-gray-900 flex flex-col h-full transition-all duration-200 ease-in-out`}
+      className={`
+        ${isCollapsed ? 'w-36' : 'w-64'}
+        flex-none bg-white dark:bg-gray-900 flex flex-col h-full
+        transform-gpu transition-all duration-300 ease-in-out will-change-transform
+        motion-reduce:transition-none overflow-hidden
+      `}
+      role="navigation"
+      aria-label="Main navigation"
     >
-      <nav className="flex-1 overflow-y-auto">
+      <nav className="flex-1 overflow-y-auto py-2">
         {/* Inbox Menu Item */}
-        <div className={!isCollapsed ? 'px-4' : ''}>
+        <div className={!isCollapsed ? 'px-4' : 'px-2'}>
           <button
             onClick={() => onViewSelect('')}
-            className={`w-full flex items-center transition-colors duration-200 ${
-              selectedView === null
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onViewSelect('');
+              }
+            }}
+            className={`
+              relative group w-full flex items-center
+              transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 rounded-lg
+              ${selectedView === null
                 ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white'
                 : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
-            } ${isCollapsed ? 'flex-col py-3' : 'px-3 py-2 rounded-lg'} text-sm`}
+              }
+              ${isCollapsed ? 'flex-col py-2' : 'px-3 py-2'}
+              text-sm
+              transform-gpu transition-transform duration-150
+            `}
             aria-label="Inbox"
+            aria-current={selectedView === null ? 'page' : undefined}
+            role="tab"
+            tabIndex={0}
           >
-            <Inbox className={`w-5 h-5 ${isCollapsed ? 'mb-1' : 'mr-2'}`} />
+            <div className={`
+              flex items-center justify-center
+              transition-transform duration-200
+              ${isCollapsed ? 'mb-1' : 'mr-2'}
+              group-hover:rotate-[-5deg]
+            `}>
+              <Inbox className="w-5 h-5" />
+            </div>
             {isCollapsed ? (
-              <span className="text-center px-3">{getStackedLabel('Inbox')}</span>
+              <span className="text-center px-2 transition-opacity duration-200 group-hover:opacity-80">
+                {getStackedLabel('Inbox')}
+              </span>
             ) : (
-              <span className="flex-1 text-left">Inbox</span>
+              <span className="flex-1 text-left transition-opacity duration-200 group-hover:opacity-80">
+                Inbox
+              </span>
             )}
+            <div className="absolute inset-0 hover:scale-[1.02] active:scale-[0.98] pointer-events-none" />
           </button>
         </div>
 
         {/* Views Section */}
-        <div className={isCollapsed ? '' : 'px-4 mt-6'}>
-          <div className={`text-xs font-semibold text-gray-400 dark:text-gray-500 ${
-            isCollapsed ? 'py-3 flex justify-center' : 'mb-2 px-3'
-          }`}>
-            <span className={isCollapsed ? 'px-3 text-center' : ''}>Views</span>
+        <div className={`
+          transition-spacing duration-300 ease-in-out mt-4
+          ${isCollapsed ? 'px-2' : 'px-4'}
+        `}
+          role="tablist"
+          aria-label="Email views"
+        >
+          <div className={`
+            text-xs font-semibold text-gray-400 dark:text-gray-500
+            transition-all duration-300
+            ${isCollapsed ? 'py-2 flex justify-center' : 'mb-2 px-3'}
+          `}>
+            <span className={`
+              transition-all duration-300
+              ${isCollapsed ? 'text-center' : ''}
+            `}>
+              Views
+            </span>
           </div>
           <div className="space-y-1">
             {views.map((view) => (
               <button
                 key={view.id}
                 onClick={() => onViewSelect(view.id)}
-                className={`w-full flex items-center transition-colors duration-200 ${
-                  selectedView === view.id
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onViewSelect(view.id);
+                  }
+                }}
+                className={`
+                  relative group w-full flex items-center
+                  transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 rounded-lg
+                  ${selectedView === view.id
                     ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white'
                     : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
-                } ${isCollapsed ? 'flex-col py-3' : 'px-3 py-2 rounded-lg'} text-sm`}
-                aria-label={view.name}
+                  }
+                  ${isCollapsed ? 'flex-col py-2' : 'px-3 py-2'}
+                `}
+                aria-label={`${view.name} view`}
+                aria-current={selectedView === view.id ? 'page' : undefined}
+                role="tab"
+                tabIndex={0}
               >
-                {getViewIcon(view.id, 'w-5 h-5')}
+                <div className={`
+                  flex items-center justify-center
+                  transition-transform duration-200
+                  ${isCollapsed ? 'mb-1' : ''}
+                  group-hover:rotate-[-5deg]
+                `}>
+                  {getViewIcon(view.id, 'w-5 h-5')}
+                </div>
                 {isCollapsed ? (
-                  <div className="mt-1 text-center px-3">
+                  <div className="text-center px-2 transition-opacity duration-200 group-hover:opacity-80">
                     {getStackedLabel(view.name)}
                   </div>
                 ) : (
-                  <span className="flex-1 text-left ml-2">{view.name}</span>
+                  <span className="flex-1 text-left ml-2 transition-opacity duration-200 group-hover:opacity-80">
+                    {view.name}
+                  </span>
                 )}
+                <div className="absolute inset-0 hover:scale-[1.02] active:scale-[0.98] pointer-events-none" />
               </button>
             ))}
           </div>
@@ -129,21 +196,43 @@ export function Sidebar({ views, selectedView, onViewSelect, isCollapsed, onTogg
       </nav>
 
       {/* Toggle Button */}
-      <div className={isCollapsed ? '' : 'px-4 py-4'}>
+      <div className={`
+        transition-spacing duration-300 ease-in-out
+        ${isCollapsed ? 'px-2 py-2' : 'px-4 py-2'}
+      `}>
         <button
           onClick={onToggleCollapse}
-          className={`w-full flex items-center justify-center transition-colors duration-200 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 ${
-            isCollapsed ? 'flex-col py-3' : 'px-3 py-2 rounded-lg'
-          } text-sm`}
+          className={`
+            relative group w-full flex items-center justify-center
+            transition-all duration-200
+            text-gray-600 dark:text-gray-400
+            hover:text-gray-900 dark:hover:text-white
+            hover:bg-gray-50 dark:hover:bg-gray-800
+            ${isCollapsed ? 'flex-col py-2' : 'px-3 py-2 rounded-lg'}
+            text-sm
+            transform-gpu transition-transform duration-150
+          `}
           aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           <ChevronLeft
-            className={`w-5 h-5 transform transition-transform duration-200 ${
-              isCollapsed ? 'rotate-180 mb-1' : ''
-            }`}
+            className={`
+              w-5 h-5 transform
+              transition-all duration-300 ease-in-out
+              group-hover:scale-110
+              ${isCollapsed ? 'rotate-180 mb-1' : ''}
+            `}
           />
-          {!isCollapsed && <span className="ml-2">Collapse</span>}
-          {isCollapsed && <span className="mt-1 px-3">Expand</span>}
+          {!isCollapsed && (
+            <span className="ml-2 transition-opacity duration-200 group-hover:opacity-80">
+              Collapse
+            </span>
+          )}
+          {isCollapsed && (
+            <span className="px-2 mt-1 transition-opacity duration-200 group-hover:opacity-80">
+              Expand
+            </span>
+          )}
+          <div className="absolute inset-0 hover:scale-[1.02] active:scale-[0.98] pointer-events-none" />
         </button>
       </div>
     </aside>

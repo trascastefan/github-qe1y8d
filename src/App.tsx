@@ -168,7 +168,15 @@ function App() {
             onUpdateTags={handleUpdateTags}
           />
         ) : (
-          <div className="flex-1 md:ml-0 ml-24 overflow-hidden bg-surface dark:bg-surface-dark">
+          <div 
+            className={`
+              flex-1 overflow-hidden bg-surface dark:bg-surface-dark
+              ${currentPage === 'home' ? (
+                isSidebarCollapsed ? 'md:ml-0' : 'md:ml-0'
+              ) : 'ml-0'}
+              transition-[margin] duration-300 ease-in-out
+            `}
+          >
             <EmailList 
               emails={emails}
               selectedView={selectedView}

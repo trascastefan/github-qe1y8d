@@ -68,7 +68,11 @@ export function EmailList({ emails, selectedView, views, getParentView, tags }: 
   };
 
   return (
-    <main className="flex flex-col h-full overflow-hidden bg-white dark:bg-gray-900">
+    <main 
+      className="flex flex-col h-full overflow-hidden bg-white dark:bg-gray-900 w-full"
+      role="main"
+      aria-label="Email list"
+    >
       <div className="flex-none bg-white dark:bg-gray-900 border-b dark:border-gray-700 z-10">
         <div className="flex items-center justify-between px-4 py-2">
           <div className="flex items-center">
@@ -78,14 +82,16 @@ export function EmailList({ emails, selectedView, views, getParentView, tags }: 
               aria-label="Select all emails" 
             />
             <button 
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20"
               aria-label="Refresh emails"
+              tabIndex={0}
             >
               <RefreshCcw className="w-5 h-5 text-gray-600 dark:text-gray-300" />
             </button>
             <button 
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20"
               aria-label="Archive selected emails"
+              tabIndex={0}
             >
               <Archive className="w-5 h-5 text-gray-600 dark:text-gray-300" />
             </button>
@@ -98,31 +104,66 @@ export function EmailList({ emails, selectedView, views, getParentView, tags }: 
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto">
-        {filteredEmails.map((email) => (
+      <div 
+        className="flex-1 overflow-y-auto w-full"
+        role="list"
+        aria-label="Email messages"
+      >
+        {filteredEmails.map((email, index) => (
           <div
             key={email.id}
-            className="flex items-center px-4 py-3 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+            className="flex items-center px-4 py-3 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer focus-within:bg-gray-50 dark:focus-within:bg-gray-800 w-full"
+            role="listitem"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                // Handle email selection
+                setSelectedEmail(email);
+              }
+            }}
           >
             <input 
               type="checkbox" 
               className="mr-4 h-5 w-5"
               aria-label={`Select email from ${email.sender}`}
+              tabIndex={0}
             />
             <div className="flex-1 min-w-0">
               <div className="flex items-center">
-                <span className="font-medium max-w-[calc(100%-100px)] break-words dark:text-white">
+                <span 
+                  className="font-medium max-w-[calc(100%-100px)] break-words dark:text-white"
+                  role="text"
+                  aria-label={`From: ${email.sender}`}
+                >
                   {email.sender}
                 </span>
-                <span className="ml-auto text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                <span 
+                  className="ml-auto text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap"
+                  role="text"
+                  aria-label={`Sent on: ${email.date}`}
+                >
                   {email.date}
                 </span>
               </div>
-              <div className="text-sm text-gray-600 dark:text-gray-300">
+              <div 
+                className="text-sm text-gray-600 dark:text-gray-300"
+                role="text"
+                aria-label={`Subject: ${email.subject}`}
+              >
                 <div className="break-words">{email.subject}</div>
-                <div className="text-gray-500 dark:text-gray-400 break-words">{email.preview}</div>
+                <div 
+                  className="text-gray-500 dark:text-gray-400 break-words"
+                  aria-label={`Preview: ${email.preview}`}
+                >
+                  {email.preview}
+                </div>
               </div>
-              <div className="flex gap-2 mt-2 flex-wrap">
+              <div 
+                className="flex gap-2 mt-2 flex-wrap"
+                role="group"
+                aria-label="Email tags"
+              >
                 {email.tags.map((tag) => (
                   <TagPill
                     key={tag}
@@ -136,10 +177,19 @@ export function EmailList({ emails, selectedView, views, getParentView, tags }: 
                     setSelectedEmail(email);
                     setShowTagSelector(true);
                   }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setSelectedEmail(email);
+                      setShowTagSelector(true);
+                    }
+                  }}
                   className="inline-flex items-center px-2 py-1.5 rounded-md text-xs font-medium 
                     bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 
-                    hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors
+                    focus:outline-none focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20"
                   aria-label="Add new tag"
+                  tabIndex={0}
                 >
                   <Plus className="w-3.5 h-3.5 mr-1" />
                   Add tag
