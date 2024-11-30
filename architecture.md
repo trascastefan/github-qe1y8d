@@ -17,8 +17,18 @@
 
 3. **Sidebar** (Home page only)
    - Shows Inbox and Views in home page
-   - Hidden on views and tags pages for full-width management
-   - Dynamic navigation based on current page
+   - Collapsible sidebar with persistent state (localStorage)
+   - Two display modes:
+     - Expanded: Full-width with left-aligned items
+     - Collapsed: Compact width (128px) with centered, stacked items
+   - Consistent icon alignment with menu hamburger
+   - Section organization:
+     - Inbox button at the top
+     - Views section with label
+     - Collapse/Expand toggle at bottom
+   - Responsive design:
+     - Desktop: Fixed position with smooth transitions
+     - Mobile: Slide-out menu with full-height overlay
 
 4. **EmailList**
    - Displays emails with tags

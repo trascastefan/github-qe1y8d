@@ -221,6 +221,41 @@ colors: {
 - Clear close buttons
 - Focus trap
 
+### Sidebar
+1. **Layout & Structure**
+   - Fixed width in both states (256px expanded, 128px collapsed)
+   - Full-height design with scrollable content area
+   - Consistent padding and spacing:
+     - 16px horizontal padding for containers
+     - 12px padding for buttons
+     - 8px spacing between icon and text
+
+2. **States & Interactions**
+   - Hover effects:
+     - Expanded: Rounded corners (8px) with contained highlight
+     - Collapsed: Full-width highlight with square edges
+   - Active state: Filled background for selected items
+   - Smooth transitions between states (200ms duration)
+
+3. **Typography & Icons**
+   - Icons: 20x20px (w-5 h-5) for consistency
+   - Labels: 
+     - Expanded: Left-aligned, single line
+     - Collapsed: Centered, max 3 lines with ellipsis
+   - Section labels: 12px semibold, muted color
+
+4. **Responsive Behavior**
+   - Desktop: Fixed position with smooth state transitions
+   - Mobile: Slide-out menu with overlay background
+   - Touch targets minimum 44px height
+   - State persistence across sessions
+
+5. **Accessibility**
+   - ARIA labels for all interactive elements
+   - Keyboard navigation support
+   - Sufficient color contrast for text and icons
+   - Reduced motion support
+
 ## Animation Guidelines
 
 ### Transitions

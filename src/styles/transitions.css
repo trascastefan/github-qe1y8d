@@ -2,6 +2,7 @@
 :root {
   --theme-transition-duration: 200ms;
   --theme-transition-timing: ease-in-out;
+  --sidebar-transition-duration: 200ms;
 }
 
 /* Preload state - prevent transitions on initial load */
@@ -45,9 +46,81 @@
   transition-property: transform;
 }
 
+/* Sidebar specific transitions */
+.sidebar-transition {
+  transition-property: width, transform;
+  transition-duration: var(--sidebar-transition-duration);
+  transition-timing-function: var(--theme-transition-timing);
+}
+
+/* Common styles for collapsed and expanded states */
+.sidebar-item {
+  transition-property: background-color, color, transform;
+  transition-duration: var(--sidebar-transition-duration);
+  transition-timing-function: var(--theme-transition-timing);
+}
+
+/* Collapsed state styles (mobile and desktop) */
+.sidebar-collapsed button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+
+.sidebar-collapsed .icon {
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-collapsed span {
+  font-size: 0.75rem;
+  line-height: 1.2;
+  max-width: 100%;
+  word-break: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: center;
+  min-width: 0;
+}
+
+/* Expanded state styles */
+.sidebar-expanded button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.sidebar-expanded .icon {
+  margin-right: 0.5rem;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  .sidebar-transition {
+    position: fixed;
+    z-index: 40;
+    height: 100vh;
+  }
+}
+
+/* Desktop-specific styles */
+@media (min-width: 769px) {
+  .sidebar-expanded .sidebar-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
 /* Reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
-  .theme-transition {
+  .theme-transition,
+  .sidebar-transition,
+  .sidebar-item {
     transition: none !important;
   }
 }
@@ -68,4 +141,22 @@
 /* Smooth image transitions */
 .theme-transition img {
   transition: filter var(--theme-transition-duration) var(--theme-transition-timing);
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 30;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--sidebar-transition-duration) var(--theme-transition-timing);
+  }
+  
+  .sidebar-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+  }
 }
