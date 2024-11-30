@@ -1,16 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { Tags as TagsIcon, GripVertical, Plus, X } from 'lucide-react';
 import { Tag } from '../types';
 import { TagModal } from './TagModal';
+import { tagService } from '../services/TagService';
 
 interface TagsPageProps {
-  tags: Tag[];
   onUpdateTags: (tags: Tag[]) => void;
 }
 
-export function TagsPage({ tags, onUpdateTags }: TagsPageProps) {
+export function TagsPage({ onUpdateTags }: TagsPageProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [tags, setTags] = useState<Tag[]>(tagService.getAllTags());
+
+  useEffect(() => {
+    const unsubscribe = tagService.subscribe(setTags);
+    return () => unsubscribe();
+  }, []);
+
+  const handleAddTag = (tagName: string) => {
+    tagService.addTag(tagName);
+    setIsModalOpen(false);
+  };
+
+  const handleDeleteTag = (tagId: string) => {
+    tagService.deleteTag(tagId);
+  };
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -19,29 +34,8 @@ export function TagsPage({ tags, onUpdateTags }: TagsPageProps) {
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
 
+    setTags(items);
     onUpdateTags(items);
-  };
-
-  const handleAddTag = (tagName: string) => {
-    // Create a base ID from the tag name (lowercase, no spaces)
-    const baseId = tagName.toLowerCase().replace(/\s+/g, '');
-    
-    // Find the highest number used for this base ID
-    const existingNumbers = tags
-      .filter(t => t.id.startsWith(baseId))
-      .map(t => {
-        const num = parseInt(t.id.replace(baseId, ''), 10);
-        return isNaN(num) ? 0 : num;
-      });
-    
-    const nextNumber = existingNumbers.length > 0 ? Math.max(...existingNumbers) + 1 : 1;
-    
-    const newTag: Tag = {
-      id: `${baseId}${nextNumber}`,
-      name: tagName
-    };
-    
-    onUpdateTags([...tags, newTag]);
   };
 
   return (
@@ -73,15 +67,24 @@ export function TagsPage({ tags, onUpdateTags }: TagsPageProps) {
                         {...provided.draggableProps}
                         className="bg-white dark:bg-surface-dark-secondary rounded-lg border border-border dark:border-border-dark p-4 transition-colors duration-200"
                       >
-                        <div className="flex items-center">
-                          <div
-                            {...provided.dragHandleProps}
-                            className="mr-3 text-secondary dark:text-text-dark-secondary hover:text-gray-600 dark:hover:text-text-dark-primary transition-colors"
-                            aria-label={`Drag to reorder ${tag.name}`}
-                          >
-                            <GripVertical className="w-5 h-5" />
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <div
+                              {...provided.dragHandleProps}
+                              className="mr-3 text-secondary dark:text-text-dark-secondary hover:text-gray-600 dark:hover:text-text-dark-primary transition-colors"
+                              aria-label={`Drag to reorder ${tag.name}`}
+                            >
+                              <GripVertical className="w-5 h-5" />
+                            </div>
+                            <span className="font-medium text-text-primary dark:text-text-dark-primary">{tag.name}</span>
                           </div>
-                          <span className="font-medium text-text-primary dark:text-text-dark-primary">{tag.name}</span>
+                          <button
+                            onClick={() => handleDeleteTag(tag.id)}
+                            className="p-1 text-text-secondary hover:text-text-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                            aria-label={`Delete ${tag.name}`}
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
                         </div>
                       </div>
                     )}
@@ -94,12 +97,14 @@ export function TagsPage({ tags, onUpdateTags }: TagsPageProps) {
         </DragDropContext>
       </div>
 
-      <TagModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSave={handleAddTag}
-        tags={tags}
-      />
+      {isModalOpen && (
+        <TagModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSave={handleAddTag}
+          tags={tags}
+        />
+      )}
     </main>
   );
 }

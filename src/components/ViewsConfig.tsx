@@ -5,6 +5,7 @@ import { View, TagCondition } from '../types';
 import { TagSelector } from './TagSelector';
 import { getEmailCount } from '../utils/emailFilters';
 import { TagPill } from './TagPill';
+import { tagService } from '../services/TagService';
 import emailData from '../data/emails.json';
 
 interface ViewsConfigProps {
@@ -100,6 +101,46 @@ export function ViewsConfig({ views, onUpdateViews }: ViewsConfigProps) {
     }
   };
 
+  const initialViews: View[] = [
+    {
+      id: '1',
+      name: 'Official Documents',
+      conditions: [
+        { type: 'includes-any', tags: ['gov1', 'tax1'] }
+      ]
+    },
+    {
+      id: '2',
+      name: 'Personal Correspondence',
+      conditions: [
+        { type: 'includes-any', tags: ['prof1', 'job1'] }
+      ]
+    },
+    {
+      id: '3',
+      name: 'Work Related',
+      conditions: [
+        { type: 'includes-any', tags: ['work1', 'prof1'] }
+      ]
+    },
+    {
+      id: '4',
+      name: 'Promotions',
+      conditions: [
+        { type: 'includes-any', tags: ['bank1', 'invest1'] }
+      ]
+    },
+    {
+      id: '5',
+      name: 'Newsletters',
+      conditions: [
+        { type: 'includes-any', tags: ['edu1', 'util1'] }
+      ]
+    }
+  ];
+
+  const [viewsState, setViewsState] = useState<View[]>(initialViews);
+
   return (
     <div className="flex-1 p-8 overflow-y-auto bg-surface dark:bg-surface-dark">
       <div className="max-w-3xl mx-auto">
@@ -113,7 +154,7 @@ export function ViewsConfig({ views, onUpdateViews }: ViewsConfigProps) {
                 ref={provided.innerRef}
                 className="space-y-4"
               >
-                {views.map((view, index) => {
+                {viewsState.map((view, index) => {
                   const matchingEmails = getEmailCount(emailData.emails, view);
                   
                   return (
@@ -163,15 +204,18 @@ export function ViewsConfig({ views, onUpdateViews }: ViewsConfigProps) {
                                   </select>
 
                                   <div className="flex flex-wrap gap-2">
-                                    {condition.tags.map((tag) => (
-                                      <TagPill
-                                        key={`${view.id}-${conditionIndex}-${tag}`}
-                                        tag={tag}
-                                        onRemove={() => handleUpdateTags(
-                                          condition.tags.filter(t => t !== tag)
-                                        )}
-                                      />
-                                    ))}
+                                    {condition.tags.map((tagId) => {
+                                      const tag = tagService.getTagById(tagId);
+                                      return tag ? (
+                                        <TagPill
+                                          key={`${view.id}-${conditionIndex}-${tagId}`}
+                                          tag={tag}
+                                          onRemove={() => handleUpdateTags(
+                                            condition.tags.filter(t => t !== tagId)
+                                          )}
+                                        />
+                                      ) : null;
+                                    })}
                                     <button
                                       onClick={() => {
                                         setActiveView({ viewId: view.id, conditionIndex });
@@ -223,13 +267,43 @@ export function ViewsConfig({ views, onUpdateViews }: ViewsConfigProps) {
 
       {showTagSelector && activeView && (
         <TagSelector
-          existingTags={views.find(v => v.id === activeView.viewId)?.conditions[activeView.conditionIndex].tags || []}
-          availableTags={Array.from(new Set(views.flatMap(view => view.conditions.flatMap(c => c.tags))))}
-          tags={[]}
-          onSave={handleUpdateTags}
+          selectedTagIds={viewsState.find(v => v.id === activeView.viewId)?.conditions[activeView.conditionIndex].tags || []}
+          onSave={(updatedTagIds) => {
+            const updatedViews = viewsState.map(view => {
+              if (view.id === activeView.viewId) {
+                const updatedConditions = view.conditions.map((condition, index) => {
+                  if (index === activeView.conditionIndex) {
+                    return { ...condition, tags: updatedTagIds };
+                  }
+                  return condition;
+                });
+                return { ...view, conditions: updatedConditions };
+              }
+              return view;
+            });
+            setViewsState(updatedViews);
+            setShowTagSelector(false);
+            setActiveView(null);
+          }}
           onClose={() => {
             setShowTagSelector(false);
             setActiveView(null);
+          }}
+          onAddNewTag={(newTagName) => {
+            const newTag = tagService.addTag(newTagName);
+            const updatedViews = viewsState.map(view => {
+              if (view.id === activeView.viewId) {
+                const updatedConditions = view.conditions.map((condition, index) => {
+                  if (index === activeView.conditionIndex) {
+                    return { ...condition, tags: [...condition.tags, newTag.id] };
+                  }
+                  return condition;
+                });
+                return { ...view, conditions: updatedConditions };
+              }
+              return view;
+            });
+            setViewsState(updatedViews);
           }}
         />
       )}

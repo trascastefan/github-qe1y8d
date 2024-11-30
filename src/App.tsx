@@ -7,7 +7,7 @@ import { ViewsConfig } from './components/ViewsConfig';
 import { TagsPage } from './components/TagsPage';
 import { View, Tag, Email } from './types';
 import emailData from './data/emails.json';
-import tagData from './data/tags.json';
+import { tagService } from './services/TagService';
 
 function App() {
   const [selectedView, setSelectedView] = useState<string | null>(null);
@@ -22,71 +22,64 @@ function App() {
       visible: true,
       conditions: [{ 
         type: 'includes-any',
-        tags: tagData.tags
-          .filter(tag => tag.category === 'general' || tag.category === 'official')
-          .map(tag => tag.id)
+        tags: ['gov1', 'tax1']
       }]
     },
     {
-      id: 'living',
-      name: 'Living',
+      id: 'personal',
+      name: 'Personal Correspondence',
       visible: true,
       conditions: [{
         type: 'includes-any',
-        tags: tagData.tags
-          .filter(tag => tag.category === 'home')
-          .map(tag => tag.id)
-      }]
-    },
-    {
-      id: 'banking',
-      name: 'Banking & Finance',
-      visible: true,
-      conditions: [{
-        type: 'includes-any',
-        tags: tagData.tags
-          .filter(tag => tag.category === 'finance')
-          .map(tag => tag.id)
+        tags: ['prof1', 'job1']
       }]
     },
     {
       id: 'work',
-      name: 'Professional',
+      name: 'Work Related',
       visible: true,
       conditions: [{
         type: 'includes-any',
-        tags: tagData.tags
-          .filter(tag => tag.category === 'professional')
-          .map(tag => tag.id)
+        tags: ['work1', 'prof1']
       }]
     },
     {
-      id: 'education',
-      name: 'Education',
+      id: 'promotions',
+      name: 'Promotions',
       visible: true,
       conditions: [{
         type: 'includes-any',
-        tags: tagData.tags
-          .filter(tag => tag.category === 'learning')
-          .map(tag => tag.id)
+        tags: ['bank1', 'invest1']
+      }]
+    },
+    {
+      id: 'newsletters',
+      name: 'Newsletters',
+      visible: true,
+      conditions: [{
+        type: 'includes-any',
+        tags: ['edu1', 'util1']
       }]
     }
   ]);
 
-  const [tags, setTags] = useState<Tag[]>(tagData.tags.map(tag => ({
-    id: tag.id,
-    name: tag.name,
-    description: tag.description,
-    category: tag.category
-  })));
+  const [tags, setTags] = useState<Tag[]>(tagService.getAllTags());
+  const [emails, setEmails] = useState<Email[]>(emailData.emails);
+  const [viewsState, setViewsState] = useState<View[]>([]);
 
-  const [emails] = useState<Email[]>(emailData.emails);
+  useEffect(() => {
+    const unsubscribe = tagService.subscribe(setTags);
+    return () => unsubscribe();
+  }, []);
 
-  const getTagHierarchy = (tagId: string): string[] => {
-    const tag = tags.find(t => t.id === tagId);
-    if (!tag) return [];
-    return [tag.name];
-  };
+  useEffect(() => {
+    // Sync views with ViewsConfig
+    const configuredViews = views.map(view => {
+      const configView = viewsState.find(v => v.name === view.name);
+      return configView ? { ...view, conditions: configView.conditions } : view;
+    });
+    setViews(configuredViews);
+  }, [viewsState]);
 
   const handleUpdateViews = (updatedViews: View[]) => {
     setViews(updatedViews);
@@ -94,6 +87,10 @@ function App() {
 
   const handleUpdateTags = (updatedTags: Tag[]) => {
     setTags(updatedTags);
+  };
+
+  const handleUpdateEmails = (updatedEmails: Email[]) => {
+    setEmails(updatedEmails);
   };
 
   const handleViewSelect = (view: string) => {
@@ -110,6 +107,11 @@ function App() {
 
   const toggleSidebarCollapse = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
+  };
+
+  const getTagHierarchy = (tagId: string): string[] => {
+    const tag = tagService.getTagById(tagId);
+    return tag ? [tag.name] : [];
   };
 
   useEffect(() => {
@@ -147,7 +149,10 @@ function App() {
         {currentPage === 'views' ? (
           <ViewsConfig
             views={views}
-            onUpdateViews={handleUpdateViews}
+            onUpdateViews={(updatedViews) => {
+              handleUpdateViews(updatedViews);
+              setViewsState(updatedViews);
+            }}
           />
         ) : currentPage === 'tags' ? (
           <TagsPage 
@@ -170,6 +175,7 @@ function App() {
               views={views}
               getParentView={getTagHierarchy}
               tags={tags}
+              onUpdateEmails={handleUpdateEmails}
             />
           </div>
         )}

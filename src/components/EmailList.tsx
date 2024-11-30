@@ -3,29 +3,35 @@ import { RefreshCcw, Archive, Plus } from 'lucide-react';
 import { Email, View, Tag } from '../types';
 import { TagSelector } from './TagSelector';
 import { TagPill } from './TagPill';
-import tagData from '../data/tags.json';
+import { tagService } from '../services/TagService';
 
 interface EmailListProps {
   emails: Email[];
   selectedView: string;
   views: View[];
   getParentView: (viewName: string) => string[];
+  onUpdateEmails: (emails: Email[]) => void;
 }
 
-export function EmailList({ emails, selectedView, views, getParentView }: EmailListProps) {
+export function EmailList({ 
+  emails, 
+  selectedView, 
+  views, 
+  getParentView,
+  onUpdateEmails 
+}: EmailListProps) {
   const [showTagSelector, setShowTagSelector] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
-  const [emailsState, setEmailsState] = useState<Email[]>(emails);
 
   const filteredEmails = useMemo(() => {
     if (!selectedView) {
-      return emailsState;
+      return emails;
     }
     
     const view = views.find(v => v.id === selectedView);
-    if (!view) return emailsState;
+    if (!view) return emails;
 
-    return emailsState.filter(email => {
+    return emails.filter(email => {
       return view.conditions.some(condition => {
         if (condition.type === 'includes-any') {
           return email.tags.some(tag => condition.tags.includes(tag));
@@ -33,10 +39,10 @@ export function EmailList({ emails, selectedView, views, getParentView }: EmailL
         return false;
       });
     });
-  }, [emailsState, selectedView, views]);
+  }, [emails, selectedView, views]);
 
   const handleRemoveTag = (emailId: number, tagToRemove: string) => {
-    setEmailsState(emailsState.map(email => {
+    const updatedEmails = emails.map(email => {
       if (email.id === emailId) {
         return {
           ...email,
@@ -44,12 +50,13 @@ export function EmailList({ emails, selectedView, views, getParentView }: EmailL
         };
       }
       return email;
-    }));
+    });
+    onUpdateEmails(updatedEmails);
   };
 
   const handleAddTags = (newTags: string[]) => {
     if (selectedEmail) {
-      setEmailsState(emailsState.map(email => {
+      const updatedEmails = emails.map(email => {
         if (email.id === selectedEmail.id) {
           return {
             ...email,
@@ -57,14 +64,16 @@ export function EmailList({ emails, selectedView, views, getParentView }: EmailL
           };
         }
         return email;
-      }));
+      });
+      onUpdateEmails(updatedEmails);
     }
     setShowTagSelector(false);
     setSelectedEmail(null);
   };
 
   const handleAddNewTag = (tagName: string) => {
-    console.log('New tag created:', tagName);
+    // The TagSelector component already adds the tag to tagService and updates its internal state
+    // We don't need to add it again, just wait for the onSave callback
   };
 
   return (
@@ -160,20 +169,19 @@ export function EmailList({ emails, selectedView, views, getParentView }: EmailL
                 </div>
               </div>
               <div 
-                className="flex gap-2 mt-2 flex-wrap"
-                role="group"
+                className="flex flex-wrap gap-2 mt-2" 
+                role="group" 
                 aria-label="Email tags"
               >
                 {email.tags.map((tagId) => {
-                  const tag = tagData.tags.find(t => t.id === tagId);
-                  const tagName = tag ? tag.name : tagId;
-                  return (
+                  const tag = tagService.getTagById(tagId);
+                  return tag ? (
                     <TagPill
-                      key={tagId}
-                      tag={tagName}
-                      onRemove={() => handleRemoveTag(email.id, tagId)}
+                      key={tag.id}
+                      tag={tag}
+                      onRemove={() => handleRemoveTag(email.id, tag.id)}
                     />
-                  );
+                  ) : null;
                 })}
                 <button
                   onClick={(e) => {
@@ -181,22 +189,13 @@ export function EmailList({ emails, selectedView, views, getParentView }: EmailL
                     setSelectedEmail(email);
                     setShowTagSelector(true);
                   }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      setSelectedEmail(email);
-                      setShowTagSelector(true);
-                    }
-                  }}
-                  className="inline-flex items-center px-2 py-1.5 rounded-md text-xs font-medium 
+                  className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium 
                     bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 
-                    hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors
-                    focus:outline-none focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20"
+                    hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   aria-label="Add new tag"
-                  tabIndex={0}
                 >
                   <Plus className="w-3.5 h-3.5 mr-1" />
-                  Add tag
+                  Add Tag
                 </button>
               </div>
             </div>
@@ -206,15 +205,13 @@ export function EmailList({ emails, selectedView, views, getParentView }: EmailL
 
       {showTagSelector && selectedEmail && (
         <TagSelector
-          existingTags={selectedEmail.tags}
-          availableTags={Array.from(new Set(views.flatMap(view => view.conditions.flatMap(c => c.tags))))}
-          tags={tagData.tags}
+          selectedTagIds={selectedEmail.tags}
+          onSave={handleAddTags}
           onClose={() => {
             setShowTagSelector(false);
             setSelectedEmail(null);
           }}
           onAddNewTag={handleAddNewTag}
-          onAddTags={handleAddTags}
         />
       )}
     </main>
