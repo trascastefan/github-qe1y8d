@@ -64,6 +64,91 @@
 --danger-dark: #ef4444
 ```
 
+## Theme System
+
+### Color System
+
+Our color system is built with semantic tokens that adapt to both light and dark modes while maintaining accessibility and visual hierarchy.
+
+```typescript
+// Example color tokens
+colors: {
+  primary: {
+    DEFAULT: 'var(--color-primary)',
+    hover: 'var(--color-primary-hover)',
+    active: 'var(--color-primary-active)',
+  },
+  surface: {
+    DEFAULT: 'var(--color-surface)',
+    elevated: 'var(--color-surface-elevated)',
+    inverse: 'var(--color-surface-inverse)',
+  },
+  text: {
+    DEFAULT: 'var(--color-text)',
+    secondary: 'var(--color-text-secondary)',
+    inverse: 'var(--color-text-inverse)',
+  }
+}
+```
+
+### Dark Mode Guidelines
+
+1. **Color Usage**
+   - Use semantic color tokens for consistent theming
+   - Maintain proper contrast ratios (WCAG AA/AAA)
+   - Implement content-aware contrast
+   - Support high contrast mode
+
+2. **Performance Optimizations**
+   - Use CSS containment for paint optimization
+   - Implement hardware acceleration for transitions
+   - Batch theme-related DOM updates
+   - Cache computed styles and DOM queries
+
+3. **Transitions**
+   - Smooth theme transitions (150-200ms)
+   - Hardware-accelerated properties
+   - Respect reduced motion preferences
+   - Disable during theme changes
+
+4. **Best Practices**
+   - Test color combinations in both themes
+   - Validate contrast ratios
+   - Support system preferences
+   - Maintain consistent visual hierarchy
+
+### Implementation
+
+```css
+/* Example CSS implementation */
+:root {
+  /* Light theme variables */
+  --color-primary: #0066cc;
+  --color-surface: #ffffff;
+  --color-text: #1a1a1a;
+}
+
+:root[data-theme="dark"] {
+  /* Dark theme variables */
+  --color-primary: #66b3ff;
+  --color-surface: #1a1a1a;
+  --color-text: #ffffff;
+}
+
+/* Performance optimizations */
+.theme-transition {
+  transition: background-color 200ms, color 200ms;
+  will-change: background-color, color;
+  contain: paint;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-transition {
+    transition: none;
+  }
+}
+```
+
 ## Typography
 
 ### Font Family

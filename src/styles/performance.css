@@ -1,0 +1,111 @@
+/* Performance optimizations for theme switching */
+
+/* CSS containment for layout performance */
+[data-theme] {
+  contain: paint layout style;
+}
+
+/* Optimize paint performance for theme-sensitive elements */
+[data-theme] .theme-sensitive {
+  will-change: auto;
+  contain: paint layout;
+}
+
+/* Hardware acceleration for smooth transitions */
+[data-theme] .hardware-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+/* Prevent layout shifts during theme changes */
+[data-theme] .fixed-size {
+  contain: size layout;
+}
+
+/* Optimize large content areas */
+[data-theme] .large-content {
+  contain: content;
+}
+
+/* Prevent FOUC */
+.theme-pending {
+  visibility: hidden;
+}
+
+/* Disable transitions during theme changes */
+.disable-transitions * {
+  transition: none !important;
+}
+
+/* Optimize specific properties that change with theme */
+[data-theme] .bg-transition {
+  will-change: background-color;
+  contain: paint;
+}
+
+[data-theme] .color-transition {
+  will-change: color;
+  contain: paint;
+}
+
+[data-theme] .border-transition {
+  will-change: border-color;
+  contain: paint;
+}
+
+/* Layer promotion for frequently animated elements */
+[data-theme] .promote-layer {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Reduce paint area for theme-sensitive images */
+[data-theme] img.theme-sensitive {
+  contain: paint size layout;
+  will-change: filter;
+}
+
+/* Optimize scrolling performance */
+[data-theme] .scroll-container {
+  will-change: transform;
+  contain: paint layout;
+}
+
+/* Reduce repaints for fixed elements */
+[data-theme] .fixed-element {
+  transform: translateZ(0);
+  will-change: transform;
+  contain: paint layout;
+}
+
+/* Optimize animations during theme changes */
+@media (prefers-reduced-motion: no-preference) {
+  [data-theme] .animate-theme {
+    transition: background-color 200ms ease-in-out,
+                color 200ms ease-in-out,
+                border-color 200ms ease-in-out;
+    will-change: background-color, color, border-color;
+    contain: paint layout;
+  }
+}
+
+/* Prevent animations when reduced motion is preferred */
+@media (prefers-reduced-motion: reduce) {
+  [data-theme] * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Optimize paint performance for dark mode specific elements */
+[data-theme="dark"] .dark-mode-content {
+  contain: paint layout;
+  will-change: auto;
+}
+
+/* Performance optimizations for high contrast mode */
+[data-theme-color="high-contrast"] .contrast-sensitive {
+  contain: paint;
+  will-change: color, background-color;
+}

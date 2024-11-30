@@ -153,6 +153,72 @@
    - Proper handling of hover states for touch devices
    - Responsive image loading and scaling
 
+## Theme System
+
+### Dark Mode Architecture
+
+1. **Performance-Optimized Theme Management**
+   - Efficient DOM updates using RequestAnimationFrame
+   - CSS containment for optimized paint performance
+   - Hardware acceleration for smooth transitions
+   - Batched state updates and memoized calculations
+
+2. **Theme Components**
+   ```typescript
+   // Theme State Management
+   interface ThemeState {
+     theme: 'light' | 'dark' | 'system'
+     isDark: boolean
+     isHighContrast: boolean
+     reducedMotion: boolean
+   }
+
+   // Theme Performance Utilities
+   {
+     applyTheme: (state: ThemeState) => void
+     getSystemTheme: () => boolean
+     observeThemeChanges: (callback: (isDark: boolean) => void) => () => void
+   }
+   ```
+
+3. **Theme Integration Points**
+   - Root level theme initialization
+   - System preference synchronization
+   - Cross-tab state management
+   - Performance-optimized transitions
+
+4. **Theme Performance Features**
+   - Paint containment optimization
+   - Layout performance enhancement
+   - Transition management
+   - Hardware acceleration
+
+### Best Practices
+
+1. **Theme Implementation**
+   - Use semantic color tokens
+   - Implement content-aware contrast
+   - Support high contrast mode
+   - Handle reduced motion preferences
+
+2. **Performance Optimization**
+   - Batch DOM updates
+   - Use CSS containment
+   - Implement hardware acceleration
+   - Optimize paint operations
+
+3. **Accessibility Considerations**
+   - Support system preferences
+   - Maintain WCAG compliance
+   - Provide high contrast option
+   - Handle reduced motion
+
+4. **Developer Guidelines**
+   - Use provided theme hooks
+   - Follow semantic naming
+   - Implement performance classes
+   - Test across themes
+
 ## Data Management
 - JSON-based email data store
 - Tag filtering utilities
@@ -160,7 +226,6 @@
 - Real-time email count calculations
 
 ## Future Considerations
-- Dark mode
 - defining tags definition for prompting LLMs structured outputs to identify emails as having a specific tag
 - Email actions (archive, delete, etc.)
 - Accessibility features (keyboard navigation, screen readers, etc.)

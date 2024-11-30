@@ -1,0 +1,71 @@
+/* Theme transition configuration */
+:root {
+  --theme-transition-duration: 200ms;
+  --theme-transition-timing: ease-in-out;
+}
+
+/* Preload state - prevent transitions on initial load */
+.preload * {
+  transition: none !important;
+}
+
+/* Theme transition class */
+.theme-transition {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-duration: var(--theme-transition-duration);
+  transition-timing-function: var(--theme-transition-timing);
+}
+
+/* Hardware acceleration for smoother transitions */
+.hardware-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+/* Specific element transitions */
+.theme-transition.bg-transition {
+  transition-property: background-color;
+}
+
+.theme-transition.text-transition {
+  transition-property: color;
+}
+
+.theme-transition.border-transition {
+  transition-property: border-color;
+}
+
+.theme-transition.shadow-transition {
+  transition-property: box-shadow;
+}
+
+.theme-transition.transform-transition {
+  transition-property: transform;
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .theme-transition {
+    transition: none !important;
+  }
+}
+
+/* Optimize paint performance for specific properties */
+.theme-transition [class*="bg-"],
+.theme-transition [class*="text-"],
+.theme-transition [class*="border-"],
+.theme-transition [class*="shadow-"] {
+  will-change: auto;
+}
+
+/* Performance optimizations for large areas */
+.theme-transition .large-area {
+  contain: layout style paint;
+}
+
+/* Smooth image transitions */
+.theme-transition img {
+  transition: filter var(--theme-transition-duration) var(--theme-transition-timing);
+}

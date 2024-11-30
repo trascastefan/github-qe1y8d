@@ -8,6 +8,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script type="module" crossorigin src="/assets/index-C9xWcqwg.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-DUNEFHYT.css">
+  <!-- Prevent flash of incorrect theme -->
+<script>
+  (function() {
+    const storedTheme = localStorage.getItem('theme-preference');
+    if (storedTheme === 'dark' || 
+       (storedTheme === 'system' && 
+        window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+    
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        document.documentElement.classList.add('theme-transition');
+      }, 0);
+    });
+  })();
+</script>
+<style>
+  .theme-transition * {
+    transition: background-color 200ms ease-in-out,
+               border-color 200ms ease-in-out,
+               color 200ms ease-in-out;
+  }
+  
+  html.theme-transition {
+    background-color: var(--background);
+  }
+</style>
   </head>
   <body>
     <div id="root"></div>
