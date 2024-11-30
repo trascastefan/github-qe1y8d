@@ -12,5 +12,6 @@ export interface View {
   id: string;
   name: string;
   visible: boolean;
+  icon: string;
   conditions: TagCondition[];
 }

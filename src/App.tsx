@@ -7,6 +7,7 @@ import { ViewsConfig } from './components/ViewsConfig';
 import { TagsPage } from './components/TagsPage';
 import { View, Tag, Email } from './types';
 import emailData from './data/emails.json';
+import viewsData from './data/views.json';
 import { tagService } from './services/TagService';
 
 function App() {
@@ -15,54 +16,7 @@ function App() {
   const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(window.innerWidth < 768);
   
-  const [views, setViews] = useState<View[]>([
-    { 
-      id: 'docs', 
-      name: 'Official Documents', 
-      visible: true,
-      conditions: [{ 
-        type: 'includes-any',
-        tags: ['gov1', 'tax1']
-      }]
-    },
-    {
-      id: 'personal',
-      name: 'Personal Correspondence',
-      visible: true,
-      conditions: [{
-        type: 'includes-any',
-        tags: ['prof1', 'job1']
-      }]
-    },
-    {
-      id: 'work',
-      name: 'Work Related',
-      visible: true,
-      conditions: [{
-        type: 'includes-any',
-        tags: ['work1', 'prof1']
-      }]
-    },
-    {
-      id: 'promotions',
-      name: 'Promotions',
-      visible: true,
-      conditions: [{
-        type: 'includes-any',
-        tags: ['bank1', 'invest1']
-      }]
-    },
-    {
-      id: 'newsletters',
-      name: 'Newsletters',
-      visible: true,
-      conditions: [{
-        type: 'includes-any',
-        tags: ['edu1', 'util1']
-      }]
-    }
-  ]);
-
+  const [views, setViews] = useState<View[]>(viewsData.views);
   const [tags, setTags] = useState<Tag[]>(tagService.getAllTags());
   const [emails, setEmails] = useState<Email[]>(emailData.emails);
   const [viewsState, setViewsState] = useState<View[]>([]);

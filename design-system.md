@@ -232,18 +232,69 @@ colors: {
 - Proper spacing between elements
 
 ### Tags
-- Compact design
-- Clear remove buttons
-- Hover states
-- Color coding for different types
-- Maximum width with ellipsis
+- **Visual Style**
+  ```css
+  --tag-bg: #f1f5f9
+  --tag-text: #475569
+  --tag-border: #e2e8f0
+  --tag-hover-bg: #e2e8f0
+  --tag-selected-bg: #bfdbfe
+  --tag-selected-text: #1e40af
+  ```
+
+- **Dimensions**
+  - Height: 24px
+  - Padding: 4px 8px
+  - Border radius: 4px
+  - Gap between tags: 8px
+
+- **Typography**
+  - Font size: 12px
+  - Font weight: 500
+  - Line height: 16px
+
+- **States**
+  - Default: Light background, subtle text
+  - Hover: Slightly darker background
+  - Selected: Accent color background
+  - Disabled: Reduced opacity
+  - Focus: Blue outline (2px)
 
 ### Modals
-- Centered positioning
-- Backdrop blur
-- Smooth animations
-- Clear close buttons
-- Focus trap
+- **Layout**
+  ```css
+  --modal-bg: #ffffff
+  --modal-border: #e2e8f0
+  --modal-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1)
+  --modal-backdrop: rgba(0, 0, 0, 0.5)
+  ```
+
+- **Dimensions**
+  - Max width: 480px
+  - Min height: 200px
+  - Border radius: 8px
+  - Padding: 24px
+
+- **Animation**
+  - Entry: Scale up (300ms ease-out)
+  - Exit: Scale down (200ms ease-in)
+  - Backdrop: Fade (200ms)
+
+- **Typography**
+  - Title: 18px, 600 weight
+  - Content: 14px, 400 weight
+  - Actions: 14px, 500 weight
+
+- **Spacing**
+  - Header bottom margin: 16px
+  - Content bottom margin: 24px
+  - Action buttons gap: 12px
+
+- **Focus Management**
+  - Auto-focus first interactive element
+  - Trap focus within modal
+  - Restore focus on close
+  - Visible focus indicators
 
 ### Sidebar
 1. **Layout & Structure**

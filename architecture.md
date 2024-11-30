@@ -228,6 +228,67 @@
    - Optimize repaints during animations
    - Handle memory management for touch events
 
+## Tag System Architecture
+
+1. **TagService**
+   - Centralized tag management
+   - CRUD operations for tags
+   - Tag validation and formatting
+   - Subscription system for tag updates
+   - Caching mechanism for performance
+
+2. **Tag Components**
+   - **TagPill**: Reusable tag display component
+     - Consistent styling across application
+     - Click handling for selection/deselection
+     - Optional remove button
+   
+   - **TagSelector**: Modal-based tag selection
+     - Search functionality
+     - Initial display of 7 tags
+     - "Show All" expansion option
+     - New tag creation interface
+     - Click-outside behavior for dismissal
+
+   - **TagModal**: Tag creation/editing interface
+     - Input validation
+     - Error handling
+     - Consistent modal behavior
+
+3. **Tag Integration**
+   - **EmailList**: Tag management for individual emails
+   - **ViewsConfig**: Tag-based filtering conditions
+   - **TagsPage**: Global tag management
+
+## Modal System
+
+1. **Core Modal Features**
+   - Consistent styling and behavior
+   - Keyboard navigation (Escape to close)
+   - Focus trap management
+   - Click-outside handling
+   - Smooth animations
+   - Accessibility compliance
+
+2. **Modal Types**
+   - **TagSelector Modal**
+     - Tag selection interface
+     - Search and filtering
+     - Tag creation option
+   
+   - **Tag Creation Modal**
+     - New tag input
+     - Validation feedback
+     - Success/error states
+
+3. **Modal Behavior**
+   - Centered positioning
+   - Backdrop blur effect
+   - Smooth enter/exit animations
+   - Focus management
+   - Screen reader announcements
+   - Touch device support
+
 ## Theme System
 
 ### Dark Mode Architecture

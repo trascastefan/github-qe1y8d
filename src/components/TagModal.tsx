@@ -2,6 +2,7 @@ import React, { useState, useMemo, useRef } from 'react';
 import { X, Search } from 'lucide-react';
 import { Tag } from '../types';
 import { TagPill } from './TagPill';
+import { tagService } from '../services/tagService'; // Assuming tagService is imported from here
 
 interface TagModalProps {
   isOpen: boolean;
@@ -25,28 +26,19 @@ export function TagModal({ isOpen, onClose, onSave, existingTags }: TagModalProp
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Trim the tag name and validate
-    const trimmedName = tagName.trim();
-    
-    // Check if tag name is empty
-    if (!trimmedName) {
-      setError('Tag name cannot be empty');
+    const validation = tagService.validateTagName(tagName);
+    if (!validation.isValid) {
+      setError(validation.error);
       return;
     }
 
-    // Check if tag already exists (case-insensitive)
-    const existingTag = existingTags.find(
-      (tag) => tag.name.toLowerCase() === trimmedName.toLowerCase()
-    );
-
-    if (existingTag) {
-      setError('A tag with this name already exists');
-      return;
-    }
-
-    // Save the tag
-    onSave(trimmedName);
+    onSave(tagName.trim());
     onClose();
+  };
+
+  const handleTagNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTagName(e.target.value);
+    setError(null); // Clear error when user starts typing
   };
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -91,10 +83,7 @@ export function TagModal({ isOpen, onClose, onSave, existingTags }: TagModalProp
               id="tagName"
               type="text"
               value={tagName}
-              onChange={(e) => {
-                setTagName(e.target.value);
-                setError(null);
-              }}
+              onChange={handleTagNameChange}
               placeholder="Enter tag name"
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 
                 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
@@ -159,6 +148,7 @@ export function TagModal({ isOpen, onClose, onSave, existingTags }: TagModalProp
               </button>
               <button
                 type="submit"
+                disabled={!tagName.trim()}
                 className="flex-1 px-4 py-2 text-sm font-medium text-white bg-primary 
                   hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed 
                   rounded-md transition-colors"

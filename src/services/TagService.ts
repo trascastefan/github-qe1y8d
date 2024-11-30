@@ -1,7 +1,18 @@
 import { Tag } from '../types';
 import tagData from '../data/tags.json';
 
+// Tag validation configuration
+const TAG_VALIDATION = {
+  minLength: 2,
+  maxLength: 50
+};
+
 type TagChangeCallback = (tags: Tag[]) => void;
+
+interface ValidationResult {
+  isValid: boolean;
+  error?: string;
+}
 
 export class TagService {
   private tags: Tag[] = tagData.tags;
@@ -32,29 +43,80 @@ export class TagService {
       .filter((tag): tag is Tag => tag !== undefined);
   }
 
-  addTag(name: string): Tag {
+  validateTagName(name: string): ValidationResult {
+    const trimmedName = name.trim();
+
+    if (!trimmedName) {
+      return {
+        isValid: false,
+        error: 'Tag name cannot be empty'
+      };
+    }
+
+    if (trimmedName.length < TAG_VALIDATION.minLength) {
+      return {
+        isValid: false,
+        error: `Tag name must be at least ${TAG_VALIDATION.minLength} characters`
+      };
+    }
+
+    if (trimmedName.length > TAG_VALIDATION.maxLength) {
+      return {
+        isValid: false,
+        error: `Tag name cannot exceed ${TAG_VALIDATION.maxLength} characters`
+      };
+    }
+
+    // Check for duplicates (case-insensitive)
+    const isDuplicate = this.tags.some(
+      tag => tag.name.toLowerCase() === trimmedName.toLowerCase()
+    );
+    
+    if (isDuplicate) {
+      return {
+        isValid: false,
+        error: 'A tag with this name already exists'
+      };
+    }
+
+    return { isValid: true };
+  }
+
+  addTag(name: string): Tag | { error: string } {
+    const validation = this.validateTagName(name);
+    if (!validation.isValid) {
+      return { error: validation.error! };
+    }
+
     const newTag: Tag = {
-      id: `tag${Date.now()}`,
-      name
+      id: `tag-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      name: name.trim()
     };
+
     this.tags = [...this.tags, newTag];
     this.notifySubscribers();
     return newTag;
   }
 
-  updateTag(id: string, name: string): Tag | undefined {
+  updateTag(id: string, name: string): Tag | { error: string } | undefined {
     const tagIndex = this.tags.findIndex(tag => tag.id === id);
-    if (tagIndex !== -1) {
-      const updatedTag = { ...this.tags[tagIndex], name };
-      this.tags = [
-        ...this.tags.slice(0, tagIndex),
-        updatedTag,
-        ...this.tags.slice(tagIndex + 1)
-      ];
-      this.notifySubscribers();
-      return updatedTag;
+    if (tagIndex === -1) {
+      return undefined;
     }
-    return undefined;
+
+    const validation = this.validateTagName(name);
+    if (!validation.isValid) {
+      return { error: validation.error! };
+    }
+
+    const updatedTag = { ...this.tags[tagIndex], name: name.trim() };
+    this.tags = [
+      ...this.tags.slice(0, tagIndex),
+      updatedTag,
+      ...this.tags.slice(tagIndex + 1)
+    ];
+    this.notifySubscribers();
+    return updatedTag;
   }
 
   deleteTag(id: string): boolean {

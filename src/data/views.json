@@ -1,0 +1,64 @@
+{
+  "views": [
+    {
+      "id": "docs",
+      "name": "Official Documents", 
+      "icon": "FileText",
+      "visible": true,
+      "conditions": [{ 
+        "type": "includes-any",
+        "tags": ["gov1", "tax1"]
+      }]
+    },
+    {
+      "id": "personal",
+      "name": "Personal",
+      "icon": "User",
+      "visible": true,
+      "conditions": [{
+        "type": "includes-any",
+        "tags": ["prof1", "job1"]
+      }]
+    },
+    {
+      "id": "work",
+      "name": "Work Related",
+      "icon": "Briefcase",
+      "visible": true,
+      "conditions": [{
+        "type": "includes-any",
+        "tags": ["work1", "prof1"]
+      }]
+    },
+    {
+      "id": "promotions",
+      "name": "Promotions",
+      "icon": "Tag",
+      "visible": true,
+      "conditions": [{
+        "type": "includes-any",
+        "tags": ["promo1", "discount1"]
+      }]
+    },
+    {
+      "id": "banking",
+      "name": "Banking & Finance",
+      "icon": "CreditCard",
+      "visible": true,
+      "conditions": [{
+        "type": "includes-any",
+        "tags": ["bank1", "invest1"]
+      }]
+    },
+    {
+      "id": "health",
+      "name": "Healthcare",
+      "icon": "Heart",
+      "visible": true,
+      "conditions": [{
+        "type": "includes-any",
+        "tags": ["health1", "medical1"]
+      }]
+    }
+  ]
+}

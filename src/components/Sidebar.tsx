@@ -1,6 +1,32 @@
 import React, { useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Inbox, Mail, Star, FileEdit, Send, AlertOctagon, Trash2, FileText, Building2, Briefcase, GraduationCap, HomeIcon, CreditCard, Folder } from 'lucide-react';
+import { 
+  ChevronLeft, 
+  ChevronRight, 
+  FileText,
+  User,
+  Briefcase,
+  Tag,
+  CreditCard,
+  Heart,
+  Mail, 
+  Inbox, 
+  Archive, 
+  Star, 
+  Flag,
+  Folder, 
+  Users, 
+  Calendar, 
+  Bell,
+  MessageCircle, 
+  ShoppingCart, 
+  Bookmark,
+  Settings, 
+  AlertCircle, 
+  CheckCircle,
+  LucideIcon
+} from 'lucide-react';
 import { View } from '../types';
+import viewsData from '../data/views.json';
 
 interface SidebarProps {
   views: View[];
@@ -9,6 +35,32 @@ interface SidebarProps {
   isCollapsed: boolean;
   onToggleCollapse: () => void;
 }
+
+const iconMap: Record<string, LucideIcon> = {
+  Mail, 
+  Inbox, 
+  Archive, 
+  Star, 
+  Flag,
+  Folder, 
+  Tag,
+  Users, 
+  Calendar, 
+  Bell,
+  MessageCircle, 
+  ShoppingCart, 
+  Heart, 
+  Bookmark,
+  FileText,
+  Settings, 
+  AlertCircle, 
+  CheckCircle,
+  User,
+  Briefcase,
+  CreditCard
+};
+
+const hasLongWord = (text: string) => text.split(' ').some(word => word.length > 13);
 
 export function Sidebar({ views, selectedView, onViewSelect, isCollapsed, onToggleCollapse }: SidebarProps) {
   // Load initial collapsed state from localStorage
@@ -24,47 +76,9 @@ export function Sidebar({ views, selectedView, onViewSelect, isCollapsed, onTogg
     localStorage.setItem('sidebarCollapsed', isCollapsed.toString());
   }, [isCollapsed]);
 
-  const getViewIcon = (view: string, size: string) => {
-    switch (view.toLowerCase()) {
-      case 'docs':
-        return <FileText className={size} />;
-      case 'living':
-        return <HomeIcon className={size} />;
-      case 'banking':
-        return <CreditCard className={size} />;
-      case 'work':
-        return <Briefcase className={size} />;
-      case 'education':
-        return <GraduationCap className={size} />;
-      case 'business':
-        return <Building2 className={size} />;
-      case 'gov':
-        return <Building2 className={size} />;
-      case 'tax':
-        return <FileText className={size} />;
-      case 'health-ins':
-        return <FileText className={size} />;
-      case 'invest':
-        return <CreditCard className={size} />;
-      case 'housing':
-        return <HomeIcon className={size} />;
-      case 'job':
-        return <Briefcase className={size} />;
-      case 'prof':
-        return <Briefcase className={size} />;
-      case 'edu':
-        return <GraduationCap className={size} />;
-      default:
-        return <Folder className={size} />;
-    }
-  };
-
-  const getStackedLabel = (label: string) => {
-    return label.split(' ').map((word, index) => (
-      <span key={index} className="block text-center leading-tight">
-        {word}
-      </span>
-    ));
+  const renderIcon = (iconName: string, className: string) => {
+    const Icon = iconMap[iconName];
+    return Icon ? <Icon className={className} /> : null;
   };
 
   return (
@@ -111,16 +125,14 @@ export function Sidebar({ views, selectedView, onViewSelect, isCollapsed, onTogg
               ${isCollapsed ? 'mb-1' : 'mr-2'}
               group-hover:rotate-[-5deg]
             `}>
-              <Inbox className="w-5 h-5" />
+              {renderIcon('FileText', 'w-5 h-5')}
             </div>
             {isCollapsed ? (
               <span className="text-center px-2 transition-opacity duration-200 group-hover:opacity-80">
-                {getStackedLabel('Inbox')}
-              </span>
-            ) : (
-              <span className="flex-1 text-left transition-opacity duration-200 group-hover:opacity-80">
                 Inbox
               </span>
+            ) : (
+              <span className="flex-1 text-left">Inbox</span>
             )}
             <div className="absolute inset-0 hover:scale-[1.02] active:scale-[0.98] pointer-events-none" />
           </button>
@@ -128,70 +140,67 @@ export function Sidebar({ views, selectedView, onViewSelect, isCollapsed, onTogg
 
         {/* Views Section */}
         <div className={`
-          transition-spacing duration-300 ease-in-out mt-4
-          ${isCollapsed ? 'px-2' : 'px-4'}
-        `}
-          role="tablist"
-          aria-label="Email views"
-        >
-          <div className={`
-            text-xs font-semibold text-gray-400 dark:text-gray-500
-            transition-all duration-300
-            ${isCollapsed ? 'py-2 flex justify-center' : 'mb-2 px-3'}
-          `}>
-            <span className={`
-              transition-all duration-300
-              ${isCollapsed ? 'text-center' : ''}
+          ${!isCollapsed ? 'px-4' : 'px-2'}
+          mt-4
+        `}>
+          {views.length > 0 && (
+            <div className={`
+              text-xs font-medium text-gray-500 dark:text-gray-400 mb-2
+              ${isCollapsed ? 'text-center' : 'pl-3'}
             `}>
-              Views
-            </span>
-          </div>
-          <div className="space-y-1">
-            {views.map((view) => (
-              <button
-                key={view.id}
-                onClick={() => onViewSelect(view.id)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    onViewSelect(view.id);
-                  }
-                }}
-                className={`
-                  relative group w-full flex items-center
-                  transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 rounded-lg
-                  ${selectedView === view.id
-                    ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
-                  }
-                  ${isCollapsed ? 'flex-col py-2' : 'px-3 py-2'}
-                `}
-                aria-label={`${view.name} view`}
-                aria-current={selectedView === view.id ? 'page' : undefined}
-                role="tab"
-                tabIndex={0}
-              >
+              VIEWS
+            </div>
+          )}
+          {views.map((view) => (
+            <button
+              key={view.id}
+              onClick={() => onViewSelect(view.id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onViewSelect(view.id);
+                }
+              }}
+              className={`
+                relative group w-full flex items-center
+                transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 rounded-lg
+                ${selectedView === view.id
+                  ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
+                }
+                ${isCollapsed ? 'flex-col py-2' : 'px-3 py-2'}
+                text-sm
+                transform-gpu transition-transform duration-150
+                ${hasLongWord(view.name) ? 'truncate' : ''}
+              `}
+              aria-label={view.name}
+              aria-current={selectedView === view.id ? 'page' : undefined}
+              role="tab"
+              tabIndex={0}
+            >
+              <div className={`
+                flex items-center justify-center
+                transition-transform duration-200
+                ${isCollapsed ? 'mb-1' : ''}
+                group-hover:rotate-[-5deg]
+              `}>
+                {renderIcon(view.icon, 'w-5 h-5')}
+              </div>
+              {isCollapsed ? (
                 <div className={`
-                  flex items-center justify-center
-                  transition-transform duration-200
-                  ${isCollapsed ? 'mb-1' : ''}
-                  group-hover:rotate-[-5deg]
+                  text-center px-2 transition-opacity duration-200 group-hover:opacity-80
+                  ${hasLongWord(view.name) ? 'text-xs' : 'text-sm'}
                 `}>
-                  {getViewIcon(view.id, 'w-5 h-5')}
+                  {view.name}
                 </div>
-                {isCollapsed ? (
-                  <div className="text-center px-2 transition-opacity duration-200 group-hover:opacity-80">
-                    {getStackedLabel(view.name)}
-                  </div>
-                ) : (
-                  <span className="flex-1 text-left ml-2 transition-opacity duration-200 group-hover:opacity-80">
-                    {view.name}
-                  </span>
-                )}
-                <div className="absolute inset-0 hover:scale-[1.02] active:scale-[0.98] pointer-events-none" />
-              </button>
-            ))}
-          </div>
+              ) : (
+                <span className="flex-1 text-left ml-2 transition-opacity duration-200 group-hover:opacity-80">
+                  {view.name}
+                </span>
+              )}
+              <div className="absolute inset-0 hover:scale-[1.02] active:scale-[0.98] pointer-events-none" />
+            </button>
+          ))}
         </div>
       </nav>
 
