@@ -226,6 +226,8 @@
 - Real-time email count calculations
 
 ## Future Considerations
+- improving homepage Sidebar for mobile
+- optimizing sidebar for mobile  
 - defining tags definition for prompting LLMs structured outputs to identify emails as having a specific tag
 - Email actions (archive, delete, etc.)
 - Accessibility features (keyboard navigation, screen readers, etc.)
