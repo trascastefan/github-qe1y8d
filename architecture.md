@@ -95,7 +95,15 @@
 
 ### Data Models
 
-1. **View**
+1. **Tag**
+   ```typescript
+   {
+     id: string;    // Unique identifier in the format: word + number (e.g., 'gov1', 'tax1')
+     name: string;  // Display name for the tag
+   }
+   ```
+
+2. **View**
    ```typescript
    {
      id: string
@@ -105,7 +113,7 @@
    }
    ```
 
-2. **TagCondition**
+3. **TagCondition**
    ```typescript
    {
      type: 'includes-any' | 'includes-all' | 'excludes-any'
@@ -113,15 +121,17 @@
    }
    ```
 
-3. **Tag**
+4. **Tag**
    ```typescript
-   {
-     id: string
-     name: string
+   interface Tag {
+     // Unique identifier combining a word and number (e.g., "gov1", "tax1")
+     id: string;
+     // Display name of the tag
+     name: string;
    }
    ```
 
-4. **Email**
+5. **Email**
    ```typescript
    {
      id: number
@@ -291,9 +301,9 @@
 - Real-time email count calculations
 
 ## Future Considerations
-- defining tags definition for prompting LLMs structured outputs to identify emails as having a specific tag
+- creating tags database
+-defining tags definition for prompting LLMs structured outputs to identify emails as having a specific tag
 - Email actions (archive, delete, etc.)
-- Accessibility features (keyboard navigation, screen readers, etc.)
 - Creating column data model and integration with views and tags
 - defining columns for prompting LLMs structured outputs
 - defining UIs layers associated with columns

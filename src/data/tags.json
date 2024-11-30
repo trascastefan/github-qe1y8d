@@ -1,99 +1,52 @@
 {
   "tags": [
     {
-      "id": "document",
-      "name": "Document",
-      "description": "Documents and files"
+      "id": "gov1",
+      "name": "Government"
     },
     {
-      "id": "official",
-      "name": "Official",
-      "description": "Official documents and communications"
+      "id": "tax1",
+      "name": "Taxes"
     },
     {
-      "id": "living",
-      "name": "Living",
-      "description": "Home and living related"
+      "id": "health1",
+      "name": "Health Insurance"
     },
     {
-      "id": "home",
-      "name": "Home",
-      "description": "Home-related items"
+      "id": "bank1",
+      "name": "Banking"
     },
     {
-      "id": "utilities",
-      "name": "Utilities",
-      "description": "Utility bills and services"
+      "id": "invest1",
+      "name": "Investment"
     },
     {
-      "id": "banking",
-      "name": "Banking",
-      "description": "Banking-related items"
+      "id": "house1",
+      "name": "Housing"
     },
     {
-      "id": "finance",
-      "name": "Finance",
-      "description": "Financial matters"
+      "id": "util1",
+      "name": "Utilities"
     },
     {
-      "id": "work",
-      "name": "Work",
-      "description": "Work-related items"
+      "id": "job1",
+      "name": "Job"
     },
     {
-      "id": "education",
-      "name": "Education",
-      "description": "Education-related items"
+      "id": "prof1",
+      "name": "Professional"
     },
     {
-      "id": "school",
-      "name": "School",
-      "description": "School-related items"
+      "id": "edu1",
+      "name": "Education"
     },
     {
-      "id": "business",
-      "name": "Business",
-      "description": "Business-related items"
+      "id": "imp1",
+      "name": "Important"
     },
     {
-      "id": "gov",
-      "name": "Government",
-      "description": "Government-related items"
-    },
-    {
-      "id": "tax",
-      "name": "Tax",
-      "description": "Tax-related items"
-    },
-    {
-      "id": "health-ins",
-      "name": "Health Insurance",
-      "description": "Health insurance documents"
-    },
-    {
-      "id": "invest",
-      "name": "Investment",
-      "description": "Investment-related items"
-    },
-    {
-      "id": "housing",
-      "name": "Housing",
-      "description": "Housing-related items"
-    },
-    {
-      "id": "job",
-      "name": "Job",
-      "description": "Job-related items"
-    },
-    {
-      "id": "prof",
-      "name": "Professional",
-      "description": "Professional matters"
-    },
-    {
-      "id": "edu",
-      "name": "Education",
-      "description": "Educational matters"
+      "id": "work1",
+      "name": "Work"
     }
   ]
 }

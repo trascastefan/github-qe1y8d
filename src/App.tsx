@@ -7,6 +7,7 @@ import { ViewsConfig } from './components/ViewsConfig';
 import { TagsPage } from './components/TagsPage';
 import { View, Tag, Email } from './types';
 import emailData from './data/emails.json';
+import tagData from './data/tags.json';
 
 function App() {
   const [selectedView, setSelectedView] = useState<string | null>(null);
@@ -21,7 +22,9 @@ function App() {
       visible: true,
       conditions: [{ 
         type: 'includes-any',
-        tags: ['document', 'official']
+        tags: tagData.tags
+          .filter(tag => tag.category === 'general' || tag.category === 'official')
+          .map(tag => tag.id)
       }]
     },
     {
@@ -30,25 +33,31 @@ function App() {
       visible: true,
       conditions: [{
         type: 'includes-any',
-        tags: ['living', 'home', 'utilities']
+        tags: tagData.tags
+          .filter(tag => tag.category === 'home')
+          .map(tag => tag.id)
       }]
     },
     {
       id: 'banking',
-      name: 'Banking',
+      name: 'Banking & Finance',
       visible: true,
       conditions: [{
         type: 'includes-any',
-        tags: ['banking', 'finance']
+        tags: tagData.tags
+          .filter(tag => tag.category === 'finance')
+          .map(tag => tag.id)
       }]
     },
     {
       id: 'work',
-      name: 'Work',
+      name: 'Professional',
       visible: true,
       conditions: [{
         type: 'includes-any',
-        tags: ['work']
+        tags: tagData.tags
+          .filter(tag => tag.category === 'professional')
+          .map(tag => tag.id)
       }]
     },
     {
@@ -57,41 +66,19 @@ function App() {
       visible: true,
       conditions: [{
         type: 'includes-any',
-        tags: ['education', 'school']
-      }]
-    },
-    {
-      id: 'business',
-      name: 'Business',
-      visible: true,
-      conditions: [{
-        type: 'includes-any',
-        tags: ['business']
+        tags: tagData.tags
+          .filter(tag => tag.category === 'learning')
+          .map(tag => tag.id)
       }]
     }
   ]);
 
-  const [tags, setTags] = useState<Tag[]>([
-    { id: 'document', name: 'Document' },
-    { id: 'official', name: 'Official' },
-    { id: 'living', name: 'Living' },
-    { id: 'home', name: 'Home' },
-    { id: 'utilities', name: 'Utilities' },
-    { id: 'banking', name: 'Banking' },
-    { id: 'finance', name: 'Finance' },
-    { id: 'work', name: 'Work' },
-    { id: 'education', name: 'Education' },
-    { id: 'school', name: 'School' },
-    { id: 'business', name: 'Business' },
-    { id: 'gov', name: 'Government' },
-    { id: 'tax', name: 'Tax' },
-    { id: 'health-ins', name: 'Health Insurance' },
-    { id: 'invest', name: 'Investment' },
-    { id: 'housing', name: 'Housing' },
-    { id: 'job', name: 'Job' },
-    { id: 'prof', name: 'Professional' },
-    { id: 'edu', name: 'Education' }
-  ]);
+  const [tags, setTags] = useState<Tag[]>(tagData.tags.map(tag => ({
+    id: tag.id,
+    name: tag.name,
+    description: tag.description,
+    category: tag.category
+  })));
 
   const [emails] = useState<Email[]>(emailData.emails);
 

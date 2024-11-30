@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { X, Search, Plus } from 'lucide-react';
 import { Tag } from '../types';
 import { TagPill } from './TagPill';
@@ -77,146 +77,145 @@ export function TagSelector({
     }
   };
 
-  const filteredTags = availableTags.filter(tag =>
-    tag.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredTags = useMemo(() => {
+    const query = searchQuery.toLowerCase();
+    return tags
+      .filter(tag => 
+        !selectedTags.includes(tag.id) && 
+        (tag.name.toLowerCase().includes(query) || tag.id.toLowerCase().includes(query))
+      )
+      .filter(tag => availableTags.includes(tag.id));
+  }, [searchQuery, selectedTags, tags, availableTags]);
 
   return (
     <div 
-      className={`fixed inset-0 bg-black/50 flex items-center justify-center z-50 ${className}`}
+      className={`fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 ${className}`}
       role="dialog"
       aria-modal="true"
       aria-labelledby="tag-selector-title"
     >
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-[400px] max-w-full">
+      <div className="bg-white dark:bg-surface-dark rounded-lg shadow-xl w-[500px] max-w-full max-h-[90vh] flex flex-col">
         <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">
           <h2 
             id="tag-selector-title" 
             className="text-lg font-semibold text-gray-900 dark:text-white"
           >
-            Select Tags
+            Add Tags
           </h2>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20"
-            aria-label="Close tag selector"
+            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
           </button>
         </div>
 
-        <div className="p-4">
-          <div className="relative mb-4">
+        <div className="p-4 space-y-4 flex-1 overflow-auto">
+          <div className="relative">
+            <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input
               ref={searchInputRef}
               type="text"
-              placeholder="Search tags..."
               value={searchQuery}
-              onChange={handleSearchChange}
-              className="w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-lg 
-                text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 
-                focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent outline-none"
-              aria-label="Search tags"
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search tags..."
+              className="w-full pl-10 pr-4 py-2 border dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
             />
-            <Search className="absolute left-3 top-2.5 w-5 h-5 text-gray-400 dark:text-gray-500" />
           </div>
 
-          <div 
-            className="space-y-1 max-h-[280px] overflow-y-auto pr-2"
-            role="listbox"
-            aria-label="Available tags"
-          >
-            {filteredTags.map((tag) => (
-              <label
-                key={tag}
-                className="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700/70 
-                  transition-colors group focus-within:ring-2 focus-within:ring-primary/20 dark:focus-within:ring-accent/20"
-                role="option"
-                aria-selected={selectedTags.includes(tag)}
-              >
-                <input
-                  type="checkbox"
-                  checked={selectedTags.includes(tag)}
-                  onChange={() => {
-                    if (!selectedTags.includes(tag)) {
-                      setSelectedTags([...selectedTags, tag]);
-                    } else {
-                      setSelectedTags(selectedTags.filter(t => t !== tag));
-                    }
-                  }}
-                  className="mr-3 h-4 w-4 rounded border-gray-300 dark:border-gray-600 
-                    text-blue-500 dark:text-blue-400 
-                    focus:ring-blue-500 dark:focus:ring-blue-400"
-                  aria-label={`Select ${tag}`}
-                />
-                <span className="text-gray-900 dark:text-white group-hover:text-gray-900 dark:group-hover:text-white">
-                  {tag}
-                </span>
-              </label>
-            ))}
-
-            {showNewTagInput ? (
-              <div className="p-2">
-                <div className="flex gap-2">
-                  <input
-                    ref={newTagInputRef}
-                    type="text"
-                    value={newTagName}
-                    onChange={(e) => setNewTagName(e.target.value)}
-                    placeholder="Enter new tag name"
-                    className="flex-1 px-3 py-2 bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-lg 
-                      text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 
-                      focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent outline-none"
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && newTagName.trim()) {
-                        handleAddNewTag();
-                      } else if (e.key === 'Escape') {
-                        setShowNewTagInput(false);
-                        searchInputRef.current?.focus();
-                      }
+          {selectedTags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {selectedTags.map((tagId) => {
+                const tag = tags.find(t => t.id === tagId);
+                const tagName = tag ? tag.name : tagId;
+                return (
+                  <TagPill
+                    key={tagId}
+                    tag={tagName}
+                    onRemove={() => {
+                      setSelectedTags(selectedTags.filter(id => id !== tagId));
                     }}
                   />
-                  <button
-                    onClick={handleAddNewTag}
-                    disabled={!newTagName.trim()}
-                    className="px-4 py-2 bg-blue-500 hover:bg-blue-600 dark:hover:bg-blue-400 
-                      text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed 
-                      transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-                  >
-                    Add
-                  </button>
-                </div>
-              </div>
-            ) : (
+                );
+              })}
+            </div>
+          )}
+
+          <div className="space-y-2">
+            {filteredTags.map((tag) => (
               <button
-                onClick={handleShowNewTagInput}
-                className="flex items-center w-full p-2 text-blue-500 dark:text-blue-400 
-                  hover:bg-gray-100 dark:hover:bg-gray-700/70 rounded-lg transition-colors
-                  focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-                aria-label="Create new tag"
+                key={tag.id}
+                onClick={() => setSelectedTags([...selectedTags, tag.id])}
+                className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-900 dark:text-white"
+              >
+                {tag.name}
+              </button>
+            ))}
+
+            {searchQuery && !filteredTags.length && !showNewTagInput && onAddNewTag && (
+              <button
+                onClick={() => {
+                  setNewTagName(searchQuery);
+                  setShowNewTagInput(true);
+                }}
+                className="w-full flex items-center px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-primary dark:text-accent"
               >
                 <Plus className="w-4 h-4 mr-2" />
-                Create New Tag {searchQuery && `"${searchQuery}"`}
+                Create "{searchQuery}"
               </button>
             )}
           </div>
 
-          <div className="flex justify-end space-x-2 mt-6">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 
-                dark:hover:bg-gray-700/70 rounded-lg transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={() => onSave(selectedTags)}
-              className="px-4 py-2 bg-blue-500 hover:bg-blue-600 dark:hover:bg-blue-400 
-                text-white rounded-lg transition-colors"
-            >
-              Save
-            </button>
-          </div>
+          {showNewTagInput && (
+            <div className="p-2">
+              <div className="flex gap-2">
+                <input
+                  ref={newTagInputRef}
+                  type="text"
+                  value={newTagName}
+                  onChange={(e) => setNewTagName(e.target.value)}
+                  placeholder="Enter new tag name"
+                  className="flex-1 px-3 py-2 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg 
+                    text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 
+                    focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent outline-none"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && newTagName.trim()) {
+                      handleAddNewTag();
+                    } else if (e.key === 'Escape') {
+                      setShowNewTagInput(false);
+                      searchInputRef.current?.focus();
+                    }
+                  }}
+                />
+                <button
+                  onClick={handleAddNewTag}
+                  disabled={!newTagName.trim()}
+                  className="px-4 py-2 bg-blue-500 hover:bg-blue-600 dark:hover:bg-blue-400 
+                    text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed 
+                    transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="flex justify-end space-x-2 mt-6">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 
+              dark:hover:bg-gray-800/70 rounded-lg transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => onSave(selectedTags)}
+            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 dark:hover:bg-blue-400 
+              text-white rounded-lg transition-colors"
+          >
+            Save
+          </button>
         </div>
       </div>
     </div>

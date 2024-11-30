@@ -3,16 +3,16 @@ import { RefreshCcw, Archive, Plus } from 'lucide-react';
 import { Email, View, Tag } from '../types';
 import { TagSelector } from './TagSelector';
 import { TagPill } from './TagPill';
+import tagData from '../data/tags.json';
 
 interface EmailListProps {
   emails: Email[];
   selectedView: string;
   views: View[];
   getParentView: (viewName: string) => string[];
-  tags: Tag[];
 }
 
-export function EmailList({ emails, selectedView, views, getParentView, tags }: EmailListProps) {
+export function EmailList({ emails, selectedView, views, getParentView }: EmailListProps) {
   const [showTagSelector, setShowTagSelector] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
   const [emailsState, setEmailsState] = useState<Email[]>(emails);
@@ -164,13 +164,17 @@ export function EmailList({ emails, selectedView, views, getParentView, tags }: 
                 role="group"
                 aria-label="Email tags"
               >
-                {email.tags.map((tag) => (
-                  <TagPill
-                    key={tag}
-                    tag={tags.find(t => t.id === tag)?.name || tag}
-                    onRemove={() => handleRemoveTag(email.id, tag)}
-                  />
-                ))}
+                {email.tags.map((tagId) => {
+                  const tag = tagData.tags.find(t => t.id === tagId);
+                  const tagName = tag ? tag.name : tagId;
+                  return (
+                    <TagPill
+                      key={tagId}
+                      tag={tagName}
+                      onRemove={() => handleRemoveTag(email.id, tagId)}
+                    />
+                  );
+                })}
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -204,7 +208,7 @@ export function EmailList({ emails, selectedView, views, getParentView, tags }: 
         <TagSelector
           existingTags={selectedEmail.tags}
           availableTags={Array.from(new Set(views.flatMap(view => view.conditions.flatMap(c => c.tags))))}
-          tags={tags}
+          tags={tagData.tags}
           onClose={() => {
             setShowTagSelector(false);
             setSelectedEmail(null);

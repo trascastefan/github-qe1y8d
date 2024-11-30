@@ -23,10 +23,24 @@ export function TagsPage({ tags, onUpdateTags }: TagsPageProps) {
   };
 
   const handleAddTag = (tagName: string) => {
+    // Create a base ID from the tag name (lowercase, no spaces)
+    const baseId = tagName.toLowerCase().replace(/\s+/g, '');
+    
+    // Find the highest number used for this base ID
+    const existingNumbers = tags
+      .filter(t => t.id.startsWith(baseId))
+      .map(t => {
+        const num = parseInt(t.id.replace(baseId, ''), 10);
+        return isNaN(num) ? 0 : num;
+      });
+    
+    const nextNumber = existingNumbers.length > 0 ? Math.max(...existingNumbers) + 1 : 1;
+    
     const newTag: Tag = {
-      id: `tag-${Date.now()}`,
+      id: `${baseId}${nextNumber}`,
       name: tagName
     };
+    
     onUpdateTags([...tags, newTag]);
   };
 

@@ -6,7 +6,7 @@
       "subject": "Annual Tax Statement",
       "preview": "Your tax statement for the year 2023 is now available for review. Please log in to your account to access the document.",
       "date": "Mar 15",
-      "tags": ["gov", "tax"]
+      "tags": ["gov1", "tax1"]
     },
     {
       "id": 2,
@@ -14,7 +14,7 @@
       "subject": "Insurance Renewal Notice",
       "preview": "Your health insurance policy is due for renewal. Review your coverage options and update your plan if needed.",
       "date": "Mar 14",
-      "tags": ["health-ins"]
+      "tags": ["health1", "imp1"]
     },
     {
       "id": 3,
@@ -22,7 +22,7 @@
       "subject": "Q1 Portfolio Update",
       "preview": "Your investment portfolio performance report for Q1 2024 is now available. See how your investments have grown.",
       "date": "Mar 13",
-      "tags": ["banking", "invest"]
+      "tags": ["bank1", "invest1"]
     },
     {
       "id": 4,
@@ -30,7 +30,7 @@
       "subject": "Lease Agreement Update",
       "preview": "Important updates to your lease agreement terms. Please review the changes and acknowledge receipt.",
       "date": "Mar 13",
-      "tags": ["housing", "gov"]
+      "tags": ["house1", "gov1", "imp1"]
     },
     {
       "id": 5,
@@ -38,7 +38,7 @@
       "subject": "March Statement Available",
       "preview": "Your electricity bill for March 2024 is now available. Total amount due: $142.50",
       "date": "Mar 12",
-      "tags": ["utilities"]
+      "tags": ["util1"]
     },
     {
       "id": 6,
@@ -46,7 +46,7 @@
       "subject": "Annual Performance Review",
       "preview": "Your annual performance review is scheduled for next week. Please complete the self-assessment form.",
       "date": "Mar 12",
-      "tags": ["job", "prof"]
+      "tags": ["job1", "prof1", "work1"]
     },
     {
       "id": 7,
@@ -54,7 +54,7 @@
       "subject": "Course Completion Certificate",
       "preview": "Congratulations on completing Advanced Data Analytics! Your certificate is ready to download.",
       "date": "Mar 11",
-      "tags": ["edu"]
+      "tags": ["edu1", "imp1"]
     },
     {
       "id": 8,
@@ -62,7 +62,7 @@
       "subject": "Scheduled Maintenance Notice",
       "preview": "Water service interruption scheduled for maintenance. Date: March 20, Time: 10 AM - 2 PM",
       "date": "Mar 11",
-      "tags": ["utilities"]
+      "tags": ["util1"]
     },
     {
       "id": 9,
@@ -70,7 +70,7 @@
       "subject": "Portfolio Strategy Meeting",
       "preview": "Schedule your quarterly portfolio review meeting to discuss investment strategy and market outlook.",
       "date": "Mar 10",
-      "tags": ["invest", "prof"]
+      "tags": ["invest1", "bank1", "imp1"]
     },
     {
       "id": 10,
@@ -78,7 +78,7 @@
       "subject": "Building Maintenance Update",
       "preview": "Monthly maintenance schedule for your building. Includes elevator maintenance and security updates.",
       "date": "Mar 10",
-      "tags": ["housing"]
+      "tags": ["house1"]
     },
     {
       "id": 11,
@@ -86,7 +86,7 @@
       "subject": "Membership Benefits Update",
       "preview": "New benefits added to your professional membership. Access exclusive industry reports and networking events.",
       "date": "Mar 9",
-      "tags": ["prof"]
+      "tags": ["prof1", "work1"]
     },
     {
       "id": 12,
@@ -94,7 +94,7 @@
       "subject": "Identity Verification Required",
       "preview": "Action required: Verify your identity for continued access to government services.",
       "date": "Mar 9",
-      "tags": ["gov"]
+      "tags": ["gov1", "imp1"]
     },
     {
       "id": 13,
@@ -102,7 +102,7 @@
       "subject": "New Statement Available",
       "preview": "Your monthly bank statement for February 2024 is ready to view in your online banking portal.",
       "date": "Mar 8",
-      "tags": ["banking"]
+      "tags": ["bank1"]
     },
     {
       "id": 14,
@@ -110,7 +110,7 @@
       "subject": "Job Application Update",
       "preview": "Your application for Senior Developer position has moved to the next round. Schedule your interview.",
       "date": "Mar 8",
-      "tags": ["job"]
+      "tags": ["job1", "prof1"]
     },
     {
       "id": 15,
@@ -118,7 +118,7 @@
       "subject": "Tax Return Review",
       "preview": "Review your 2023 tax return draft before final submission. Schedule a consultation if needed.",
       "date": "Mar 7",
-      "tags": ["tax", "prof"]
+      "tags": ["tax1", "prof1"]
     },
     {
       "id": 16,
@@ -126,7 +126,7 @@
       "subject": "Annual Check-up Reminder",
       "preview": "Time for your annual health check-up. Schedule your appointment online or call our office.",
       "date": "Mar 7",
-      "tags": ["health-ins"]
+      "tags": ["health1"]
     },
     {
       "id": 17,
@@ -134,7 +134,7 @@
       "subject": "Service Upgrade Available",
       "preview": "Exclusive offer: Upgrade your internet speed and get 3 months at reduced price.",
       "date": "Mar 6",
-      "tags": ["utilities"]
+      "tags": ["util1"]
     },
     {
       "id": 18,
@@ -142,7 +142,7 @@
       "subject": "Workshop Registration",
       "preview": "Your registration for 'Leadership in Tech' workshop is confirmed. Date: March 25-26",
       "date": "Mar 6",
-      "tags": ["edu", "prof"]
+      "tags": ["prof1", "work1", "edu1"]
     },
     {
       "id": 19,
@@ -150,7 +150,7 @@
       "subject": "Quarterly Statement",
       "preview": "Your retirement fund performance report for Q1 2024 is available. Review your investment allocation.",
       "date": "Mar 5",
-      "tags": ["invest", "banking"]
+      "tags": ["invest1", "bank1"]
     },
     {
       "id": 20,
@@ -158,7 +158,7 @@
       "subject": "Community Newsletter",
       "preview": "March community newsletter: upcoming events, maintenance schedule, and important announcements.",
       "date": "Mar 5",
-      "tags": ["housing"]
+      "tags": ["house1"]
     },
     {
       "id": 21,
@@ -166,7 +166,7 @@
       "subject": "Tech Conference 2024",
       "preview": "Early bird registration now open for Annual Tech Conference. Special rates for members.",
       "date": "Mar 4",
-      "tags": ["prof", "edu"]
+      "tags": ["prof1", "edu1"]
     },
     {
       "id": 22,
@@ -174,7 +174,7 @@
       "subject": "Coverage Review",
       "preview": "Annual insurance policy review: Updates to coverage options and new benefits available.",
       "date": "Mar 4",
-      "tags": ["health-ins"]
+      "tags": ["health1"]
     },
     {
       "id": 23,
@@ -182,7 +182,7 @@
       "subject": "Property Assessment",
       "preview": "Your 2024 property tax assessment is now available. Review the updated property valuation.",
       "date": "Mar 3",
-      "tags": ["tax", "housing", "gov"]
+      "tags": ["gov1", "tax1", "house1"]
     }
   ]
 }

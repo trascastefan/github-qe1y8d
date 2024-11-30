@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, TagCondition } from '../types';
 import { X } from 'lucide-react';
-import tags from '../tags.json';
+import tags from '../data/tags.json';
 
 interface TagConditionEditorProps {
   view: View;

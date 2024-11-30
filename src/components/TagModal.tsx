@@ -11,10 +11,12 @@ interface TagModalProps {
 
 export function TagModal({ isOpen, onClose, onSave, tags }: TagModalProps) {
   const [tagName, setTagName] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (isOpen) {
       setTagName('');
+      setError('');
     }
   }, [isOpen]);
 
@@ -22,10 +24,21 @@ export function TagModal({ isOpen, onClose, onSave, tags }: TagModalProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (tagName.trim()) {
-      onSave(tagName.trim());
-      onClose();
+    const trimmedName = tagName.trim();
+    
+    if (!trimmedName) {
+      setError('Tag name cannot be empty');
+      return;
     }
+
+    // Check for duplicate tag names
+    if (tags.some(tag => tag.name.toLowerCase() === trimmedName.toLowerCase())) {
+      setError('A tag with this name already exists');
+      return;
+    }
+
+    onSave(trimmedName);
+    onClose();
   };
 
   return (
@@ -49,26 +62,32 @@ export function TagModal({ isOpen, onClose, onSave, tags }: TagModalProps) {
               type="text"
               id="tagName"
               value={tagName}
-              onChange={(e) => setTagName(e.target.value)}
-              className="w-full px-3 py-2 bg-white dark:bg-surface-dark-secondary border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-dark-primary placeholder-secondary dark:placeholder-text-dark-secondary focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20 focus:border-primary dark:focus:border-accent outline-none transition-colors"
+              onChange={(e) => {
+                setTagName(e.target.value);
+                setError('');
+              }}
+              className={`w-full px-3 py-2 rounded-lg border ${
+                error ? 'border-red-500' : 'border-border dark:border-border-dark'
+              } bg-white dark:bg-surface-dark-secondary focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-accent`}
               placeholder="Enter tag name"
-              autoFocus
             />
+            {error && (
+              <p className="mt-1 text-sm text-red-500">{error}</p>
+            )}
           </div>
-          <div className="flex justify-end space-x-2">
+          <div className="flex justify-end space-x-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-text-secondary dark:text-text-dark-secondary hover:bg-surface-secondary dark:hover:bg-surface-dark-secondary rounded-lg transition-colors"
+              className="px-4 py-2 text-text-primary dark:text-text-dark-primary hover:bg-surface-secondary dark:hover:bg-surface-dark-secondary rounded-lg transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-primary dark:bg-accent text-white rounded-lg hover:bg-primary-dark dark:hover:bg-accent-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={!tagName.trim()}
+              className="px-4 py-2 bg-primary dark:bg-accent text-white rounded-lg hover:bg-primary-dark dark:hover:bg-accent-dark transition-colors"
             >
-              Create Tag
+              Add Tag
             </button>
           </div>
         </form>
