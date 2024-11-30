@@ -331,6 +331,95 @@ colors: {
    - Sufficient color contrast for text and icons
    - Reduced motion support
 
+## View Configuration Design Guidelines
+
+### Icon System
+- **Icon Library**: Lucide React
+- **Selection Criteria**:
+  - Semantic representation of view purpose
+  - Clear, minimalistic design
+  - Consistent stroke width
+  - Scalable to multiple sizes (16px, 24px, 32px)
+
+### View Icon Management
+```typescript
+interface ViewIcon {
+  name: string;        // Lucide icon name
+  category: 'system' | 'user' | 'business';
+  color?: string;      // Optional color override
+  size?: number;       // Optional size override
+}
+```
+
+### Icon Design Principles
+1. **Consistency**
+   - Uniform stroke width
+   - Pixel-perfect alignment
+   - Consistent padding
+   - Matching visual weight
+
+2. **Semantic Representation**
+   - Choose icons that clearly represent view purpose
+   - Avoid ambiguous or overly complex icons
+   - Support internationalization through universal design
+
+3. **Accessibility**
+   - High contrast ratio
+   - Clear visibility in light and dark modes
+   - Support for screen readers
+   - Meaningful aria-labels
+
+4. **Performance**
+   - Lightweight SVG icons
+   - Minimal DOM nodes
+   - GPU-accelerated rendering
+   - Efficient icon loading strategy
+
+### View Configuration UI Guidelines
+- **EditViewModal**
+  - Grid-based icon selection
+  - Hover effects for icon preview
+  - Current icon pre-selection
+  - Smooth transitions between icon states
+
+- **Sidebar Icon Display**
+  - Adaptive display in collapsed/expanded states
+  - Hover rotation effect (-5 degrees)
+  - Consistent sizing (w-5 h-5)
+  - Opacity transitions
+
+### Color and Theming
+- **Icon Color Modes**
+  ```css
+  .view-icon {
+    --icon-color-light: #1e293b;
+    --icon-color-dark: #f1f5f9;
+    --icon-color-hover: #2563eb;
+  }
+  ```
+
+- **Hover and Active States**
+  - Subtle color shift
+  - Minimal scale transformation
+  - Consistent transition duration (200ms)
+
+### Technical Implementation
+```typescript
+function renderIcon(iconName: string, className?: string) {
+  const IconComponent = lucideIcons[iconName];
+  return (
+    <IconComponent 
+      className={`
+        view-icon 
+        transition-transform 
+        group-hover:rotate-[-5deg]
+        ${className}
+      `}
+    />
+  );
+}
+```
+
 ## Animation Guidelines
 
 ### Transitions

@@ -355,6 +355,42 @@
    - Implement performance classes
    - Test across themes
 
+## View Configuration
+
+### Views JSON Structure
+```json
+{
+  "views": [
+    {
+      "id": string,
+      "name": string,
+      "icon": string,
+      "visible": boolean,
+      "conditions": TagCondition[]
+    }
+  ]
+}
+```
+
+### Key Features
+- Dynamic view configuration through `views.json`
+- Centralized view management
+- Icon selection for each view
+- Visibility toggle for views
+- Flexible tag-based filtering conditions
+
+### View Icon Management
+- Icons sourced from Lucide React library
+- Pre-selection of current view's icon in EditViewModal
+- Consistent icon display across Sidebar and EditViewModal
+- Support for multiple icon types (User, Briefcase, CreditCard)
+
+### Sidebar Enhancements
+- Persistent "VIEWS" label in both expanded and collapsed states
+- Adaptive icon and text display
+- Improved accessibility with ARIA roles and labels
+- Smooth transitions between view states
+
 ## Data Management
 - JSON-based email data store
 - Tag filtering utilities
