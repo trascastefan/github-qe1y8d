@@ -65,14 +65,22 @@ const iconMap = {
 export function EditViewModal({ isOpen, onClose, view, onSave }: EditViewModalProps) {
   const [name, setName] = useState(view?.name || '');
   const [selectedIcon, setSelectedIcon] = useState(view?.icon || 'Mail');
+  const [nameError, setNameError] = useState('');
 
   // Reset icon when view changes
   useEffect(() => {
     setName(view?.name || '');
     setSelectedIcon(view?.icon || 'Mail');
+    setNameError('');
   }, [view, isOpen]);
 
   const handleSave = () => {
+    // Validate name length
+    if (name.length > 30) {
+      setNameError('View name must be 30 characters or less');
+      return;
+    }
+
     if (!view) return;
     onSave({
       ...view,
@@ -122,13 +130,29 @@ export function EditViewModal({ isOpen, onClose, view, onSave }: EditViewModalPr
             <input
               id="name"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                const newName = e.target.value;
+                setName(newName.slice(0, 30)); // Truncate to 30 characters
+                setNameError('');
+              }}
               placeholder="View name"
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 
+              className={`w-full px-3 py-2 border 
+                ${nameError 
+                  ? 'border-red-500 dark:border-red-400' 
+                  : 'border-gray-300 dark:border-gray-600'
+                }
                 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white 
                 placeholder-gray-500 dark:placeholder-gray-400
-                focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-accent"
+                focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-accent`}
             />
+            {nameError && (
+              <p className="text-red-500 dark:text-red-400 text-xs mt-1">
+                {nameError}
+              </p>
+            )}
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              {name.length}/30 characters
+            </p>
           </div>
 
           <div className="space-y-2">

@@ -48,6 +48,12 @@ export function ViewsConfig({ views, onUpdateViews }: ViewsConfigProps) {
   };
 
   const handleSaveView = (updatedView: View) => {
+    // Validate view name length
+    if (updatedView.name.length > 30) {
+      console.error('View name must be 30 characters or less');
+      return;
+    }
+
     const newViews = views.map(view => 
       view.id === updatedView.id ? { ...view, icon: updatedView.icon } : view
     );
