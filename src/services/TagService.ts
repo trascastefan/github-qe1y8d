@@ -98,27 +98,6 @@ export class TagService {
     return newTag;
   }
 
-  updateTag(id: string, name: string): Tag | { error: string } | undefined {
-    const tagIndex = this.tags.findIndex(tag => tag.id === id);
-    if (tagIndex === -1) {
-      return undefined;
-    }
-
-    const validation = this.validateTagName(name);
-    if (!validation.isValid) {
-      return { error: validation.error! };
-    }
-
-    const updatedTag = { ...this.tags[tagIndex], name: name.trim() };
-    this.tags = [
-      ...this.tags.slice(0, tagIndex),
-      updatedTag,
-      ...this.tags.slice(tagIndex + 1)
-    ];
-    this.notifySubscribers();
-    return updatedTag;
-  }
-
   updateTag(updatedTag: Tag): Tag | { error: string } {
     // Find the index of the existing tag
     const tagIndex = this.tags.findIndex(tag => tag.id === updatedTag.id);

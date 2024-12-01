@@ -2,7 +2,7 @@ import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { X, Search } from 'lucide-react';
 import { Tag } from '../types';
 import { TagPill } from './TagPill';
-import { tagService } from '../services/tagService';
+import { tagService } from '../services/TagService';
 
 interface TagModalProps {
   isOpen: boolean;
