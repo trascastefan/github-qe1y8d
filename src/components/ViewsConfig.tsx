@@ -127,9 +127,6 @@ export function ViewsConfig({ views, onUpdateViews }: ViewsConfigProps) {
                                 CheckCircle
                               };
                               
-                              // Log view icon for debugging
-                              console.log(`View: ${view.name}, Icon: ${view.icon}`);
-
                               // Use Mail as default fallback icon if not found
                               const IconComponent = iconMap[view.icon] || Mail;
                               return (

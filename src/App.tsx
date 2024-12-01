@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { EmailList } from './components/EmailList';
@@ -10,7 +10,7 @@ import emailData from './data/emails.json';
 import viewsData from './data/views.json';
 import { tagService } from './services/TagService';
 
-function App() {
+export default function App() {
   const [selectedView, setSelectedView] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState('home');
   const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
@@ -20,6 +20,71 @@ function App() {
   const [tags, setTags] = useState<Tag[]>(tagService.getAllTags());
   const [emails, setEmails] = useState<Email[]>(emailData.emails);
   const [viewsState, setViewsState] = useState<View[]>([]);
+  
+  // Search states for each page
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const getSearchPlaceholder = () => {
+    switch (currentPage) {
+      case 'home':
+        return 'Search in mail';
+      case 'views':
+        return 'Search views';
+      case 'tags':
+        return 'Search tags';
+      default:
+        return 'Search';
+    }
+  };
+
+  // Filter functions
+  const filteredEmails = useMemo(() => {
+    if (!searchTerm) return emails;
+
+    return emails.filter(email => 
+      email.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      email.preview.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      email.tags.some(tagId => {
+        const tag = tagService.getTagById(tagId);
+        return tag?.name.toLowerCase().includes(searchTerm.toLowerCase());
+      })
+    );
+  }, [emails, searchTerm]);
+
+  const filteredViews = useMemo(() => {
+    if (!searchTerm) return views;
+
+    return views.filter(view => 
+      view.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      view.conditions.some(condition => 
+        condition.tags.some(tagId => {
+          const tag = tagService.getTagById(tagId);
+          return tag?.name.toLowerCase().includes(searchTerm.toLowerCase());
+        })
+      )
+    );
+  }, [views, searchTerm]);
+
+  const filteredTags = useMemo(() => {
+    if (!searchTerm) return tags;
+    const query = searchTerm.toLowerCase().trim();
+    
+    return tags.filter(tag => {
+      // Search in tag name
+      if (tag.name.toLowerCase().includes(query)) {
+        return true;
+      }
+      
+      // Search in instructions
+      if (tag.llmInstructions && tag.llmInstructions.length > 0) {
+        return tag.llmInstructions.some(instruction => 
+          instruction.toLowerCase().includes(query)
+        );
+      }
+      
+      return false;
+    });
+  }, [tags, searchTerm]);
 
   useEffect(() => {
     const unsubscribe = tagService.subscribe(setTags);
@@ -82,6 +147,9 @@ function App() {
       <Header 
         onSelectView={handleViewSelect} 
         onMenuClick={() => setIsNavMenuOpen(true)}
+        currentPage={currentPage}
+        onSearch={setSearchTerm}
+        searchPlaceholder={getSearchPlaceholder()}
       />
       <NavigationMenu
         isOpen={isNavMenuOpen}
@@ -102,7 +170,7 @@ function App() {
         )}
         {currentPage === 'views' ? (
           <ViewsConfig
-            views={views}
+            views={filteredViews}
             onUpdateViews={(updatedViews) => {
               handleUpdateViews(updatedViews);
               setViewsState(updatedViews);
@@ -110,8 +178,11 @@ function App() {
           />
         ) : currentPage === 'tags' ? (
           <TagsPage 
-            tags={tags}
-            onUpdateTags={handleUpdateTags}
+            tags={filteredTags}
+            onUpdateTags={(updatedTags) => {
+              setTags(updatedTags);
+              tagService.updateTags(updatedTags);
+            }}
           />
         ) : (
           <div 
@@ -124,7 +195,7 @@ function App() {
             `}
           >
             <EmailList 
-              emails={emails}
+              emails={filteredEmails}
               selectedView={selectedView}
               views={views}
               getParentView={getTagHierarchy}
@@ -137,5 +208,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

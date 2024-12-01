@@ -119,6 +119,40 @@ export class TagService {
     return updatedTag;
   }
 
+  updateTag(updatedTag: Tag): Tag | { error: string } {
+    // Find the index of the existing tag
+    const tagIndex = this.tags.findIndex(tag => tag.id === updatedTag.id);
+    
+    if (tagIndex === -1) {
+      return { error: 'Tag not found' };
+    }
+
+    // Validate the new tag name if it's being changed
+    const trimmedName = updatedTag.name.trim();
+    if (trimmedName !== this.tags[tagIndex].name) {
+      const validation = this.validateTagName(trimmedName);
+      if (!validation.isValid) {
+        return { error: validation.error! };
+      }
+    }
+
+    // Create a new array with the updated tag
+    this.tags = this.tags.map(tag => 
+      tag.id === updatedTag.id 
+        ? { 
+            ...tag, 
+            name: trimmedName,
+            llmInstructions: updatedTag.llmInstructions,
+            exampleEmails: updatedTag.exampleEmails,
+            negativeExampleEmails: updatedTag.negativeExampleEmails
+          } 
+        : tag
+    );
+
+    this.notifySubscribers();
+    return updatedTag;
+  }
+
   deleteTag(id: string): boolean {
     const index = this.tags.findIndex(tag => tag.id === id);
     if (index !== -1) {

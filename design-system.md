@@ -260,6 +260,16 @@ colors: {
   - Disabled: Reduced opacity
   - Focus: Blue outline (2px)
 
+- **Instructions List**
+  - Maximum 5 instructions per tag
+  - Individual instruction fields with remove button
+  - Add instruction button below list
+  - Clear error states for validation
+  - Consistent spacing between items (8px)
+  - Full-width input fields
+  - Placeholder text for new instructions
+  - Remove button aligned to the right
+
 ### Modals
 - **Layout**
   ```css
@@ -284,17 +294,27 @@ colors: {
   - Title: 18px, 600 weight
   - Content: 14px, 400 weight
   - Actions: 14px, 500 weight
+  - Instructions: 14px, 400 weight, line-height 1.5
 
 - **Spacing**
   - Header bottom margin: 16px
   - Content bottom margin: 24px
   - Action buttons gap: 12px
+  - Between instructions: 8px
+  - Instructions container padding: 16px
 
 - **Focus Management**
   - Auto-focus first interactive element
   - Trap focus within modal
   - Restore focus on close
   - Visible focus indicators
+  - Tab order follows visual layout
+
+- **Button States**
+  - Primary action maintains consistent style
+  - Cancel and Delete aligned left
+  - Save button right-aligned
+  - Consistent hover states
 
 ### Sidebar
 1. **Layout & Structure**

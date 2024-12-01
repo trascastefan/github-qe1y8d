@@ -2,51 +2,255 @@
   "tags": [
     {
       "id": "gov1",
-      "name": "Government"
+      "name": "Government",
+      "llmInstructions": [
+        "Identify emails from official government domains (.gov)",
+        "Look for official government letterhead or seals",
+        "Check for government agency names and official titles",
+        "Detect standard government document formatting",
+        "Identify official government communication styles"
+      ],
+      "exampleEmails": [
+        "Tax refund notification from IRS",
+        "Voter registration confirmation",
+        "Social security benefits update"
+      ],
+      "negativeExampleEmails": [
+        "Marketing email from a political campaign",
+        "Personal newsletter about local government",
+        "Spam email claiming to be from a government agency"
+      ]
     },
     {
       "id": "tax1",
-      "name": "Taxes"
+      "name": "Taxes",
+      "llmInstructions": [
+        "Look for tax form numbers (W-2, 1099, etc.)",
+        "Identify tax-related keywords and terms",
+        "Check for financial calculations and amounts",
+        "Detect tax season deadlines and dates",
+        "Find tax authority communications"
+      ],
+      "exampleEmails": [
+        "Annual tax return document",
+        "Tax payment confirmation",
+        "W-2 or 1099 form receipt"
+      ],
+      "negativeExampleEmails": [
+        "General financial advice email",
+        "Unrelated financial product advertisement",
+        "Personal budget planning email"
+      ]
     },
     {
       "id": "health1",
-      "name": "Health Insurance"
+      "name": "Health Insurance",
+      "llmInstructions": [
+        "Identify medical claim numbers and codes",
+        "Look for healthcare provider communications",
+        "Check for insurance policy details",
+        "Detect medical billing information",
+        "Find health benefit explanations"
+      ],
+      "exampleEmails": [
+        "Insurance claim approval notice",
+        "Medical bill summary",
+        "Health insurance policy update"
+      ],
+      "negativeExampleEmails": [
+        "Wellness newsletter",
+        "Gym membership promotion",
+        "General healthcare tips email"
+      ]
     },
     {
       "id": "bank1",
-      "name": "Banking"
-    },
-    {
-      "id": "invest1",
-      "name": "Investment"
-    },
-    {
-      "id": "house1",
-      "name": "Housing"
-    },
-    {
-      "id": "util1",
-      "name": "Utilities"
-    },
-    {
-      "id": "job1",
-      "name": "Job"
-    },
-    {
-      "id": "prof1",
-      "name": "Professional"
+      "name": "Banking",
+      "llmInstructions": [
+        "Look for bank account numbers and transactions",
+        "Identify banking institution names",
+        "Check for financial transaction details",
+        "Detect banking security notifications",
+        "Find account statement patterns"
+      ],
+      "exampleEmails": [
+        "Monthly account statement",
+        "Transaction alert",
+        "Bank security notification"
+      ],
+      "negativeExampleEmails": [
+        "Financial newsletter",
+        "Credit card marketing",
+        "Investment advice email"
+      ]
     },
     {
       "id": "edu1",
-      "name": "Education"
+      "name": "Education",
+      "llmInstructions": [
+        "Identify educational institution domains (.edu)",
+        "Look for course codes and academic terms",
+        "Check for student ID numbers",
+        "Detect academic calendar dates",
+        "Find educational program information"
+      ],
+      "exampleEmails": [
+        "Course registration confirmation",
+        "Grade notification",
+        "Student loan statement"
+      ],
+      "negativeExampleEmails": [
+        "Education marketing email",
+        "Online course advertisement",
+        "Alumni newsletter"
+      ]
+    },
+    {
+      "id": "invest1",
+      "name": "Investment",
+      "llmInstructions": [
+        "Identify investment account numbers and transactions",
+        "Look for investment institution names",
+        "Check for financial transaction details",
+        "Detect investment security notifications",
+        "Find account statement patterns"
+      ],
+      "exampleEmails": [
+        "Stock trade confirmation",
+        "Investment portfolio quarterly report",
+        "Retirement account statement"
+      ],
+      "negativeExampleEmails": [
+        "General financial news",
+        "Investment seminar invitation",
+        "Cryptocurrency marketing email"
+      ]
+    },
+    {
+      "id": "house1",
+      "name": "Housing",
+      "llmInstructions": [
+        "Identify housing-related keywords and terms",
+        "Look for property addresses and descriptions",
+        "Check for housing transaction details",
+        "Detect housing security notifications",
+        "Find housing document patterns"
+      ],
+      "exampleEmails": [
+        "Mortgage approval letter",
+        "Lease renewal notice",
+        "Property tax assessment"
+      ],
+      "negativeExampleEmails": [
+        "Home decor newsletter",
+        "Real estate agent marketing",
+        "Home improvement product ads"
+      ]
+    },
+    {
+      "id": "util1",
+      "name": "Utilities",
+      "llmInstructions": [
+        "Identify utility account numbers and transactions",
+        "Look for utility institution names",
+        "Check for financial transaction details",
+        "Detect utility security notifications",
+        "Find account statement patterns"
+      ],
+      "exampleEmails": [
+        "Electricity bill statement",
+        "Water service interruption notice",
+        "Internet service account update"
+      ],
+      "negativeExampleEmails": [
+        "Energy-saving tips newsletter",
+        "Utility company marketing email",
+        "Home service advertisement"
+      ]
+    },
+    {
+      "id": "job1",
+      "name": "Job",
+      "llmInstructions": [
+        "Identify job-related keywords and terms",
+        "Look for company names and job titles",
+        "Check for job application details",
+        "Detect job security notifications",
+        "Find job document patterns"
+      ],
+      "exampleEmails": [
+        "Job offer letter",
+        "Interview invitation",
+        "Employment contract"
+      ],
+      "negativeExampleEmails": [
+        "Recruitment agency newsletter",
+        "Career development webinar invite",
+        "Generic job market update"
+      ]
+    },
+    {
+      "id": "prof1",
+      "name": "Professional",
+      "llmInstructions": [
+        "Identify professional-related keywords and terms",
+        "Look for company names and job titles",
+        "Check for professional association details",
+        "Detect professional security notifications",
+        "Find professional document patterns"
+      ],
+      "exampleEmails": [
+        "Client proposal",
+        "Project update report",
+        "Professional conference invitation"
+      ],
+      "negativeExampleEmails": [
+        "General networking email",
+        "Professional association newsletter",
+        "Industry event marketing"
+      ]
     },
     {
       "id": "imp1",
-      "name": "Important"
+      "name": "Important",
+      "llmInstructions": [
+        "Identify high-priority keywords and terms",
+        "Look for urgent or time-sensitive language",
+        "Check for critical information and deadlines",
+        "Detect important security notifications",
+        "Find important document patterns"
+      ],
+      "exampleEmails": [
+        "Legal document notification",
+        "Time-sensitive financial alert",
+        "Critical medical test result"
+      ],
+      "negativeExampleEmails": [
+        "Routine reminder email",
+        "Low-priority update",
+        "General informational email"
+      ]
     },
     {
       "id": "work1",
-      "name": "Work"
+      "name": "Work",
+      "llmInstructions": [
+        "Identify work-related keywords and terms",
+        "Look for company names and job titles",
+        "Check for work project details",
+        "Detect work security notifications",
+        "Find work document patterns"
+      ],
+      "exampleEmails": [
+        "Team meeting invitation",
+        "Performance review document",
+        "Work project status update"
+      ],
+      "negativeExampleEmails": [
+        "Company-wide newsletter",
+        "General workplace wellness email",
+        "HR policy update"
+      ]
     }
   ]
 }

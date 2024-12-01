@@ -3,6 +3,7 @@ import { RefreshCcw, Archive, Plus } from 'lucide-react';
 import { Email, View, Tag } from '../types';
 import { TagSelector } from './TagSelector';
 import { TagPill } from './TagPill';
+import { RemoveTagModal } from './RemoveTagModal';
 import { tagService } from '../services/TagService';
 
 interface EmailListProps {
@@ -22,6 +23,15 @@ export function EmailList({
 }: EmailListProps) {
   const [showTagSelector, setShowTagSelector] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
+  const [removeTagModal, setRemoveTagModal] = useState<{
+    isOpen: boolean;
+    email: Email | null;
+    tag: Tag | null;
+  }>({
+    isOpen: false,
+    email: null,
+    tag: null
+  });
 
   const filteredEmails = useMemo(() => {
     if (!selectedView) {
@@ -41,17 +51,46 @@ export function EmailList({
     });
   }, [emails, selectedView, views]);
 
-  const handleRemoveTag = (emailId: number, tagToRemove: string) => {
+  const handleRemoveTag = (email: Email, tagId: string) => {
+    const tag = tagService.getTagById(tagId);
+    if (tag) {
+      setRemoveTagModal({
+        isOpen: true,
+        email,
+        tag
+      });
+    }
+  };
+
+  const handleConfirmRemoveTag = (addAsNegative: boolean) => {
+    if (!removeTagModal.email || !removeTagModal.tag) return;
+
     const updatedEmails = emails.map(email => {
-      if (email.id === emailId) {
+      if (email.id === removeTagModal.email.id) {
         return {
           ...email,
-          tags: email.tags.filter(tag => tag !== tagToRemove)
+          tags: email.tags.filter(id => id !== removeTagModal.tag?.id)
         };
       }
       return email;
     });
     onUpdateEmails(updatedEmails);
+
+    if (addAsNegative) {
+      const updatedTag = {
+        ...removeTagModal.tag,
+        negativeExamples: [
+          ...(removeTagModal.tag.negativeExamples || []),
+          {
+            subject: removeTagModal.email.subject,
+            preview: removeTagModal.email.preview,
+            timestamp: new Date().toISOString()
+          }
+        ]
+      };
+      tagService.updateTag(updatedTag);
+    }
+    setRemoveTagModal({ isOpen: false, email: null, tag: null });
   };
 
   const handleAddTags = (newTags: string[]) => {
@@ -179,7 +218,7 @@ export function EmailList({
                     <TagPill
                       key={tag.id}
                       tag={tag}
-                      onRemove={() => handleRemoveTag(email.id, tag.id)}
+                      onRemove={() => handleRemoveTag(email, tag.id)}
                     />
                   ) : null;
                 })}
@@ -212,6 +251,16 @@ export function EmailList({
             setSelectedEmail(null);
           }}
           onAddNewTag={handleAddNewTag}
+        />
+      )}
+
+      {removeTagModal.isOpen && removeTagModal.email && removeTagModal.tag && (
+        <RemoveTagModal
+          isOpen={removeTagModal.isOpen}
+          onClose={() => setRemoveTagModal({ isOpen: false, email: null, tag: null })}
+          onConfirm={handleConfirmRemoveTag}
+          email={removeTagModal.email}
+          tag={removeTagModal.tag}
         />
       )}
     </main>

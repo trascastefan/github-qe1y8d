@@ -90,16 +90,25 @@
 
 9. **TagModal**
    - Modal for creating new tags
-   - Input validation
-   - Consistent styling with other modals
+   - Input validation for name and instructions
+   - Maximum 5 instructions per tag
+   - Individual instruction editing and removal
+   - Save button acts as close when no changes
+   - Error handling and validation feedback
+   - Instructions displayed as bulleted list
+   - Consistent modal behavior
 
 ### Data Models
 
 1. **Tag**
    ```typescript
-   {
-     id: string;    // Unique identifier in the format: word + number (e.g., 'gov1', 'tax1')
-     name: string;  // Display name for the tag
+   interface Tag {
+     // Unique identifier combining a word and number (e.g., "gov1", "tax1")
+     id: string;
+     // Display name of the tag
+     name: string;
+     // List of instructions for LLM processing
+     llmInstructions?: string[];
    }
    ```
 
@@ -121,17 +130,7 @@
    }
    ```
 
-4. **Tag**
-   ```typescript
-   interface Tag {
-     // Unique identifier combining a word and number (e.g., "gov1", "tax1")
-     id: string;
-     // Display name of the tag
-     name: string;
-   }
-   ```
-
-5. **Email**
+4. **Email**
    ```typescript
    {
      id: number
@@ -251,8 +250,12 @@
      - Click-outside behavior for dismissal
 
    - **TagModal**: Tag creation/editing interface
-     - Input validation
-     - Error handling
+     - Input validation for name and instructions
+     - Maximum 5 instructions per tag
+     - Individual instruction editing and removal
+     - Save button acts as close when no changes
+     - Error handling and validation feedback
+     - Instructions displayed as bulleted list
      - Consistent modal behavior
 
 3. **Tag Integration**
@@ -398,18 +401,17 @@
 - Real-time email count calculations
 
 ## Future Considerations
-- creating tags database
 -defining tags definition for prompting LLMs structured outputs to identify emails as having a specific tag
-- Email actions (archive, delete, etc.)
 - Creating column data model and integration with views and tags
 - defining columns for prompting LLMs structured outputs
 - defining UIs layers associated with columns
+- User authentication and account management
 - creating database integration
 - Search functionality
 - Optimized performance for large datasets
 
-- User authentication and account management
-- Email attachments
+
+- Read and understand Email attachments to structure data
 - Send emails to LLMs for tagging
 - Get Emails tags from LLMs
 - create logic for associating columns to tags

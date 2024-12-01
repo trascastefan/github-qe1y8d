@@ -5,9 +5,18 @@ import { Toggle } from './Toggle';
 interface HeaderProps {
   onSelectView: (view: string) => void;
   onMenuClick: () => void;
+  currentPage: string;
+  onSearch: (searchTerm: string) => void;
+  searchPlaceholder?: string;
 }
 
-export function Header({ onSelectView, onMenuClick }: HeaderProps) {
+export function Header({ 
+  onSelectView, 
+  onMenuClick,
+  currentPage,
+  onSearch,
+  searchPlaceholder = 'Search in mail'
+}: HeaderProps) {
   const mailIconRef = useRef<HTMLDivElement>(null);
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const stored = localStorage.getItem('darkMode');
@@ -94,7 +103,8 @@ export function Header({ onSelectView, onMenuClick }: HeaderProps) {
           <Search className="w-5 h-5 text-secondary dark:text-text-dark-secondary absolute left-3 top-1/2 transform -translate-y-1/2" />
           <input
             type="text"
-            placeholder="Search in mail"
+            placeholder={searchPlaceholder}
+            onChange={(e) => onSearch(e.target.value)}
             className="w-full pl-10 pr-4 py-2 bg-surface-secondary dark:bg-surface-dark-secondary rounded-full text-sm text-text-primary dark:text-text-dark-primary placeholder-secondary dark:placeholder-text-dark-secondary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:focus:ring-accent/20"
           />
         </div>
