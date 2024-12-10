@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, TagCondition } from '../types';
 import { X } from 'lucide-react';
-import tags from '../tags.json';
+import tags from '../data/tags.json';
 
 interface TagConditionEditorProps {
   view: View;
@@ -107,8 +107,11 @@ export function TagConditionEditor({ view, onSave, onClose }: TagConditionEditor
                 Select Tags
               </label>
               <div className="p-3 border border-border rounded-lg max-h-48 overflow-y-auto">
-                {tags.map((tag) => (
-                  <label key={tag.id} className="flex items-center p-2 hover:bg-surface-secondary rounded">
+                {tags.tags.map((tag) => (
+                  <label
+                    key={tag.id}
+                    className="flex items-center space-x-2 cursor-pointer"
+                  >
                     <input
                       type="checkbox"
                       checked={selectedTags.includes(tag.id)}
@@ -119,9 +122,9 @@ export function TagConditionEditor({ view, onSave, onClose }: TagConditionEditor
                           setSelectedTags(selectedTags.filter(t => t !== tag.id));
                         }
                       }}
-                      className="mr-3"
+                      className="form-checkbox h-4 w-4 text-primary border-border rounded"
                     />
-                    {tag.name}
+                    <span className="text-sm text-text-primary">{tag.name}</span>
                   </label>
                 ))}
               </div>

@@ -17,8 +17,37 @@
 
 3. **Sidebar** (Home page only)
    - Shows Inbox and Views in home page
-   - Hidden on views and tags pages for full-width management
-   - Dynamic navigation based on current page
+   - Collapsible sidebar with persistent state (localStorage)
+   - Two display modes:
+     - Expanded: Full-width (256px) with left-aligned items
+     - Collapsed: Compact width (144px) with centered, stacked items
+   - Enhanced animations and transitions:
+     - Hardware-accelerated transforms
+     - Smooth width transitions (300ms)
+     - Icon rotation on hover (-5deg)
+     - Scale effect on hover (102%)
+     - Opacity transitions for text
+   - Enhanced accessibility features:
+     - Keyboard navigation with Enter and Space key support
+     - Focus management and visible focus indicators
+     - ARIA roles and labels for all interactive elements
+     - Screen reader announcements for state changes
+     - Reduced motion support
+     - Touch-friendly targets
+   - Performance optimizations:
+     - GPU acceleration with transform-gpu
+     - Efficient state management
+     - Optimized hover animations
+     - Overflow control to prevent scrollbars
+   - Section organization:
+     - Inbox button at the top
+     - Views section with label
+     - Collapse/Expand toggle at bottom
+   - Responsive behavior:
+     - Desktop: Fixed position with smooth transitions
+     - Mobile: Auto-collapse with smooth animation
+     - EmailList automatically expands to use available space
+     - Transition duration: 300ms for all animations
 
 4. **EmailList**
    - Displays emails with tags
@@ -26,6 +55,15 @@
    - Shows checkbox selection
    - Empty state for non-Inbox views
    - Consistent tag styling across application
+   - Responsive layout:
+     - Automatically expands to fill available space
+     - Adapts to Sidebar's collapsed state
+     - Full-width email items with proper spacing
+   - Enhanced accessibility:
+     - Keyboard navigation for email selection
+     - ARIA roles and labels for list items
+     - Focus management for interactive elements
+     - Screen reader support for email actions
 
 5. **NavigationMenu**
    - Slide-out menu for main navigation
@@ -52,12 +90,29 @@
 
 9. **TagModal**
    - Modal for creating new tags
-   - Input validation
-   - Consistent styling with other modals
+   - Input validation for name and instructions
+   - Maximum 5 instructions per tag
+   - Individual instruction editing and removal
+   - Save button acts as close when no changes
+   - Error handling and validation feedback
+   - Instructions displayed as bulleted list
+   - Consistent modal behavior
 
 ### Data Models
 
-1. **View**
+1. **Tag**
+   ```typescript
+   interface Tag {
+     // Unique identifier combining a word and number (e.g., "gov1", "tax1")
+     id: string;
+     // Display name of the tag
+     name: string;
+     // List of instructions for LLM processing
+     llmInstructions?: string[];
+   }
+   ```
+
+2. **View**
    ```typescript
    {
      id: string
@@ -67,19 +122,11 @@
    }
    ```
 
-2. **TagCondition**
+3. **TagCondition**
    ```typescript
    {
      type: 'includes-any' | 'includes-all' | 'excludes-any'
      tags: string[]
-   }
-   ```
-
-3. **Tag**
-   ```typescript
-   {
-     id: string
-     name: string
    }
    ```
 
@@ -153,6 +200,98 @@
    - Proper handling of hover states for touch devices
    - Responsive image loading and scaling
 
+## Mobile Sidebar Implementation
+
+### Touch Target Requirements
+- All interactive elements must have a minimum touch target size of 44x44 pixels
+- Implementation using padding and hit-area expansion techniques
+- No interactive elements should be closer than 8px to prevent accidental touches
+- Touch targets should provide clear visual feedback on interaction
+
+### Gesture Implementation
+1. **Swipe Detection**
+   - Use TouchEvent API for native touch handling
+   - Implement threshold-based swipe detection
+   - Track touch start and end positions
+   - Calculate swipe direction and velocity
+
+2. **Sidebar State Management**
+   - Store sidebar state in local state management
+   - Implement smooth transitions between states
+   - Provide visual indicators for current state
+   - Handle edge cases (partial swipes, quick direction changes)
+
+3. **Performance Considerations**
+   - Use CSS transforms for smooth animations
+   - Implement touch event debouncing
+   - Optimize repaints during animations
+   - Handle memory management for touch events
+
+## Tag System Architecture
+
+1. **TagService**
+   - Centralized tag management
+   - CRUD operations for tags
+   - Tag validation and formatting
+   - Subscription system for tag updates
+   - Caching mechanism for performance
+
+2. **Tag Components**
+   - **TagPill**: Reusable tag display component
+     - Consistent styling across application
+     - Click handling for selection/deselection
+     - Optional remove button
+   
+   - **TagSelector**: Modal-based tag selection
+     - Search functionality
+     - Initial display of 7 tags
+     - "Show All" expansion option
+     - New tag creation interface
+     - Click-outside behavior for dismissal
+
+   - **TagModal**: Tag creation/editing interface
+     - Input validation for name and instructions
+     - Maximum 5 instructions per tag
+     - Individual instruction editing and removal
+     - Save button acts as close when no changes
+     - Error handling and validation feedback
+     - Instructions displayed as bulleted list
+     - Consistent modal behavior
+
+3. **Tag Integration**
+   - **EmailList**: Tag management for individual emails
+   - **ViewsConfig**: Tag-based filtering conditions
+   - **TagsPage**: Global tag management
+
+## Modal System
+
+1. **Core Modal Features**
+   - Consistent styling and behavior
+   - Keyboard navigation (Escape to close)
+   - Focus trap management
+   - Click-outside handling
+   - Smooth animations
+   - Accessibility compliance
+
+2. **Modal Types**
+   - **TagSelector Modal**
+     - Tag selection interface
+     - Search and filtering
+     - Tag creation option
+   
+   - **Tag Creation Modal**
+     - New tag input
+     - Validation feedback
+     - Success/error states
+
+3. **Modal Behavior**
+   - Centered positioning
+   - Backdrop blur effect
+   - Smooth enter/exit animations
+   - Focus management
+   - Screen reader announcements
+   - Touch device support
+
 ## Theme System
 
 ### Dark Mode Architecture
@@ -219,6 +358,42 @@
    - Implement performance classes
    - Test across themes
 
+## View Configuration
+
+### Views JSON Structure
+```json
+{
+  "views": [
+    {
+      "id": string,
+      "name": string,
+      "icon": string,
+      "visible": boolean,
+      "conditions": TagCondition[]
+    }
+  ]
+}
+```
+
+### Key Features
+- Dynamic view configuration through `views.json`
+- Centralized view management
+- Icon selection for each view
+- Visibility toggle for views
+- Flexible tag-based filtering conditions
+
+### View Icon Management
+- Icons sourced from Lucide React library
+- Pre-selection of current view's icon in EditViewModal
+- Consistent icon display across Sidebar and EditViewModal
+- Support for multiple icon types (User, Briefcase, CreditCard)
+
+### Sidebar Enhancements
+- Persistent "VIEWS" label in both expanded and collapsed states
+- Adaptive icon and text display
+- Improved accessibility with ARIA roles and labels
+- Smooth transitions between view states
+
 ## Data Management
 - JSON-based email data store
 - Tag filtering utilities
@@ -226,20 +401,17 @@
 - Real-time email count calculations
 
 ## Future Considerations
-- improving homepage Sidebar for mobile
-- optimizing sidebar for mobile  
-- defining tags definition for prompting LLMs structured outputs to identify emails as having a specific tag
-- Email actions (archive, delete, etc.)
-- Accessibility features (keyboard navigation, screen readers, etc.)
+-defining tags definition for prompting LLMs structured outputs to identify emails as having a specific tag
 - Creating column data model and integration with views and tags
 - defining columns for prompting LLMs structured outputs
 - defining UIs layers associated with columns
+- User authentication and account management
 - creating database integration
 - Search functionality
 - Optimized performance for large datasets
 
-- User authentication and account management
-- Email attachments
+
+- Read and understand Email attachments to structure data
 - Send emails to LLMs for tagging
 - Get Emails tags from LLMs
 - create logic for associating columns to tags

@@ -1,0 +1,68 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "add": "Add",
+    "search": "Search"
+  },
+  "navigation": {
+    "home": "Home",
+    "inbox": "Inbox",
+    "views": "Views",
+    "tags": "Tags",
+    "settings": "Settings"
+  },
+  "sidebar": {
+    "viewsLabel": "VIEWS",
+    "toggleCollapse": "Toggle Sidebar"
+  },
+  "header": {
+    "title": "Assistant",
+    "searchPlaceholder": "Search in mail"
+  },
+  "viewModal": {
+    "editViewTitle": "Edit View",
+    "viewNameLabel": "Name",
+    "viewNamePlaceholder": "View name",
+    "iconLabel": "Icon",
+    "nameValidation": {
+      "maxLength": "View name must be 30 characters or less",
+      "characterCount": "{current}/30 characters"
+    }
+  },
+  "viewsConfig": {
+    "pageTitle": "Configure Views",
+    "dragToReorder": "Drag to reorder"
+  },
+  "tagModal": {
+    "createTag": "Create Tag",
+    "tagNameLabel": "Tag Name",
+    "tagColorLabel": "Tag Color"
+  },
+  "emailList": {
+    "emptyState": "No emails in this view",
+    "selectAll": "Select All",
+    "archive": "Archive",
+    "delete": "Delete"
+  },
+  "themePreferences": {
+    "title": "Theme Preferences",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "systemTheme": "System Theme",
+    "highContrastMode": "High Contrast Mode",
+    "reducedMotion": "Reduced Motion"
+  },
+  "errors": {
+    "generic": "An error occurred",
+    "networkError": "Network connection error",
+    "unauthorized": "Unauthorized access"
+  },
+  "accessibility": {
+    "skipToMain": "Skip to main content",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu"
+  }
+}

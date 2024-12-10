@@ -3,14 +3,24 @@ export interface TagCondition {
   tags: string[];
 }
 
+export interface NegativeExample {
+  subject: string;
+  preview: string;
+  timestamp: string;
+}
+
 export interface Tag {
   id: string;
   name: string;
+  llmInstructions: string[];
+  exampleEmails?: string[];
+  negativeExamples?: NegativeExample[];
 }
 
 export interface View {
   id: string;
   name: string;
   visible: boolean;
+  icon: string;
   conditions: TagCondition[];
 }

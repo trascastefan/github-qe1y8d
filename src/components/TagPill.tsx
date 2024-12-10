@@ -1,8 +1,9 @@
 import React from 'react';
 import { X } from 'lucide-react';
+import { Tag } from '../types';
 
 interface TagPillProps {
-  tag: string;
+  tag: Tag;
   onRemove?: () => void;
   className?: string;
 }
@@ -14,7 +15,7 @@ export function TagPill({ tag, onRemove, className = '' }: TagPillProps) {
         bg-blue-50 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 
         group hover:bg-blue-100 dark:hover:bg-blue-900/70 transition-colors ${className}`}
     >
-      {tag}
+      {tag.name}
       {onRemove && (
         <button
           onClick={(e) => {
@@ -23,7 +24,7 @@ export function TagPill({ tag, onRemove, className = '' }: TagPillProps) {
           }}
           className="ml-1.5 hover:text-blue-800 dark:hover:text-blue-200 rounded
             hover:bg-blue-100 dark:hover:bg-blue-800/50 transition-colors"
-          aria-label={`Remove ${tag} tag`}
+          aria-label={`Remove ${tag.name} tag`}
         >
           <X className="w-3.5 h-3.5" />
         </button>
