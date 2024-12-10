@@ -1,14 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Menu, Search, Settings, HelpCircle, Mail, Moon, Sun } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Menu, Search, Settings, HelpCircle, Mail, Moon, Sun, LogOut } from 'lucide-react';
 import { Toggle } from './Toggle';
+import { useGmail } from '../hooks/useGmail';
 
 interface HeaderProps {
-  onSelectView: (view: string) => void;
+  onSelectView: (viewId: string) => void;
   onMenuClick: () => void;
+  onSettingsClick: () => void;
 }
 
-export function Header({ onSelectView, onMenuClick }: HeaderProps) {
-  const mailIconRef = useRef<HTMLDivElement>(null);
+export function Header({ onSelectView, onMenuClick, onSettingsClick }: HeaderProps) {
+  const { userProfile, signOut } = useGmail();
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const stored = localStorage.getItem('darkMode');
     if (stored !== null) {
@@ -16,8 +18,12 @@ export function Header({ onSelectView, onMenuClick }: HeaderProps) {
     }
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const mailIconRef = useRef<HTMLDivElement>(null);
   const settingsRef = useRef<HTMLDivElement>(null);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -44,6 +50,24 @@ export function Header({ onSelectView, onMenuClick }: HeaderProps) {
     return () => {
       clearTimeout(initialTimeout);
       clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        buttonRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -102,14 +126,12 @@ export function Header({ onSelectView, onMenuClick }: HeaderProps) {
 
       <div className="flex items-center space-x-2">
         <button
-          className="flex items-center space-x-2"
+          onClick={onSettingsClick}
+          className="p-2 hover:bg-surface-secondary dark:hover:bg-surface-dark-secondary rounded-full transition-colors"
         >
-          <img
-            src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff"
-            alt="Profile"
-            className="w-8 h-8 rounded-full"
-          />
+          <Settings className="w-6 h-6 text-secondary dark:text-text-dark-secondary" />
         </button>
+
         <div className="relative" ref={settingsRef}>
           <button 
             className="p-2 hover:bg-surface-secondary dark:hover:bg-surface-dark-secondary rounded-full transition-colors"
@@ -131,6 +153,62 @@ export function Header({ onSelectView, onMenuClick }: HeaderProps) {
               >
                 <HelpCircle className="w-5 h-5 mr-3 text-secondary dark:text-text-dark-secondary" />
                 Help
+              </button>
+            </div>
+          )}
+        </div>
+
+        <div className="relative">
+          <button
+            ref={buttonRef}
+            onClick={() => setShowDropdown(!showDropdown)}
+            type="button"
+            className="flex items-center space-x-2 focus:outline-none hover:opacity-80 transition-opacity p-1 rounded-full cursor-pointer"
+            aria-expanded={showDropdown}
+            aria-haspopup="true"
+            aria-controls="user-menu"
+          >
+            {userProfile?.picture ? (
+              <img
+                src={userProfile.picture}
+                alt="Profile"
+                className="w-8 h-8 rounded-full border border-gray-200"
+                draggable={false}
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center border border-gray-300">
+                <span className="text-gray-600 text-sm">
+                  {userProfile?.name?.charAt(0) || 'U'}
+                </span>
+              </div>
+            )}
+          </button>
+
+          {showDropdown && (
+            <div
+              id="user-menu"
+              ref={dropdownRef}
+              className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200 ring-1 ring-black ring-opacity-5"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="user-menu-button"
+            >
+              {userProfile && (
+                <div className="px-4 py-2 border-b border-gray-100">
+                  <div className="font-medium text-gray-800 truncate">{userProfile.name}</div>
+                  <div className="text-sm text-gray-500 truncate">{userProfile.email}</div>
+                </div>
+              )}
+              <button
+                onClick={() => {
+                  signOut();
+                  setShowDropdown(false);
+                }}
+                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                role="menuitem"
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Sign out
               </button>
             </div>
           )}
