@@ -24,3 +24,12 @@ export interface View {
   icon: string;
   conditions: TagCondition[];
 }
+
+export interface Email {
+  id: string;
+  sender: string;
+  subject: string;
+  preview: string;
+  date: string;
+  tags: string[];
+}

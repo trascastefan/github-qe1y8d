@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { RefreshCcw, Archive, Plus } from 'lucide-react';
 import { Email, View, Tag } from '../types';
 import { TagSelector } from './TagSelector';
@@ -32,6 +32,11 @@ export function EmailList({
     email: null,
     tag: null
   });
+
+  // Update emailsState when props.emails changes
+  useEffect(() => {
+    setEmailsState(emails);
+  }, [emails]);
 
   const filteredEmails = useMemo(() => {
     if (!selectedView) {
@@ -103,17 +108,32 @@ export function EmailList({
           };
         }
         return email;
+<<<<<<< Updated upstream
       });
       onUpdateEmails(updatedEmails);
+=======
+      }));
+      setShowTagSelector(false);
+      setSelectedEmail(null);
+>>>>>>> Stashed changes
     }
-    setShowTagSelector(false);
-    setSelectedEmail(null);
   };
 
+<<<<<<< Updated upstream
   const handleAddNewTag = (tagName: string) => {
     // The TagSelector component already adds the tag to tagService and updates its internal state
     // We don't need to add it again, just wait for the onSave callback
   };
+=======
+  if (!emailsState.length) {
+    return (
+      <div className="flex flex-col items-center justify-center p-8 text-gray-500">
+        <div className="text-lg mb-2">No emails to display</div>
+        <div className="text-sm">Your emails will appear here once loaded</div>
+      </div>
+    );
+  }
+>>>>>>> Stashed changes
 
   return (
     <main 
@@ -207,6 +227,7 @@ export function EmailList({
                   {email.preview}
                 </div>
               </div>
+<<<<<<< Updated upstream
               <div 
                 className="flex flex-wrap gap-2 mt-2" 
                 role="group" 
@@ -222,6 +243,16 @@ export function EmailList({
                     />
                   ) : null;
                 })}
+=======
+              <div className="flex gap-2 mt-2 flex-wrap">
+                {email.tags.map((tag) => (
+                  <TagPill
+                    key={tag}
+                    tag={tag}
+                    onRemove={() => handleRemoveTag(email.id, tag)}
+                  />
+                ))}
+>>>>>>> Stashed changes
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -242,14 +273,19 @@ export function EmailList({
         ))}
       </div>
 
-      {showTagSelector && selectedEmail && (
+      {showTagSelector && (
         <TagSelector
+<<<<<<< Updated upstream
           selectedTagIds={selectedEmail.tags}
           onSave={handleAddTags}
+=======
+          isOpen={showTagSelector}
+>>>>>>> Stashed changes
           onClose={() => {
             setShowTagSelector(false);
             setSelectedEmail(null);
           }}
+<<<<<<< Updated upstream
           onAddNewTag={handleAddNewTag}
         />
       )}
@@ -261,6 +297,10 @@ export function EmailList({
           onConfirm={handleConfirmRemoveTag}
           email={removeTagModal.email}
           tag={removeTagModal.tag}
+=======
+          onSave={handleAddTags}
+          tags={tags}
+>>>>>>> Stashed changes
         />
       )}
     </main>

@@ -11,6 +11,10 @@
   },
   "dependencies": {
     "@hello-pangea/dnd": "^16.5.0",
+    "@react-oauth/google": "^0.12.1",
+    "@types/gapi": "^0.0.47",
+    "@types/gapi.auth2": "^0.0.61",
+    "@types/gapi.client.gmail-v1": "^0.0.4",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

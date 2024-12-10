@@ -5,6 +5,7 @@ import { EmailList } from './components/EmailList';
 import { NavigationMenu } from './components/NavigationMenu';
 import { ViewsConfig } from './components/ViewsConfig';
 import { TagsPage } from './components/TagsPage';
+import { GmailIntegration } from './components/GmailIntegration';
 import { View, Tag, Email } from './types';
 import emailData from './data/emails.json';
 import viewsData from './data/views.json';
@@ -143,7 +144,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="h-screen w-screen overflow-hidden">
       <Header 
         onSelectView={handleViewSelect} 
         onMenuClick={() => setIsNavMenuOpen(true)}
@@ -168,6 +169,7 @@ export default function App() {
             onToggleCollapse={toggleSidebarCollapse}
           />
         )}
+<<<<<<< Updated upstream
         {currentPage === 'views' ? (
           <ViewsConfig
             views={filteredViews}
@@ -204,6 +206,30 @@ export default function App() {
             />
           </div>
         )}
+=======
+        <div className="flex-1 overflow-auto">
+          {currentPage === 'home' && (
+            <div className="h-full">
+              <div className="h-screen w-screen overflow-hidden">
+                <GmailIntegration />
+              </div>
+            </div>
+          )}
+          {currentPage === 'views' && <ViewsConfig views={views} onViewsChange={setViews} />}
+          {currentPage === 'tags' && <TagsPage />}
+          {currentPage !== 'home' && currentPage !== 'views' && currentPage !== 'tags' && (
+            <div className="flex-1 md:ml-0 ml-24 overflow-hidden bg-surface dark:bg-surface-dark">
+              <EmailList 
+                emails={emails}
+                selectedView={selectedView}
+                views={views}
+                getParentView={getTagHierarchy}
+                tags={tags}
+              />
+            </div>
+          )}
+        </div>
+>>>>>>> Stashed changes
       </div>
     </div>
   );
